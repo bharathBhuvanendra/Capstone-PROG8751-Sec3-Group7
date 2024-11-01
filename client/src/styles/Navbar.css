@@ -1,0 +1,89 @@
+/* src/styles/Navbar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center; /* Center logo and title vertically */
+}
+
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-left: 10px; /* Space between logo and title */
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+}
+
+.nav-links li {
+  margin: 0 15px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+/* Active link styling */
+.active-link {
+  border-bottom: 2px solid #007bff; /* Underline for active link */
+  color: #000000; /* Optional: Change color of active link */
+}
+
+.nav-links a:hover {
+  color: #000000; /* Change color on hover */
+
+}
+
+.logo {
+  width: 100px; /* Adjust size as needed */
+  height: 100px; /* Maintain aspect ratio for a perfect circle */
+  border-radius: 50%; /* Makes the image circular */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+  border: 2px solid #000000; /* Optional: adds a border to match your design */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .navbar {
+      flex-direction: column;
+      padding: 10px;
+  }
+
+  .nav-links {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+  }
+
+  .nav-links li {
+      margin: 10px 0;
+  }
+
+  .navbar-title {
+      font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-title {
+      font-size: 1rem;
+      margin-left: 5px;
+  }
+
+  .nav-links li {
+      margin: 5px 0;
+  }
+}
