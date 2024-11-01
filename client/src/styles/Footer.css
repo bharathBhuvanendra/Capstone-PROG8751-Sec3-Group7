@@ -1,0 +1,90 @@
+.footer {
+    background-color: #2e2d31; /* Footer background color */
+    color: white; /* Text color */
+    padding: 40px; /* Padding for the footer */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center align items */
+    border-radius: 30px; /* Rounded corners */
+    margin-bottom: 75px; 
+    margin-left: 105px;
+    margin-right: 105px;/* Increased space at the bottom */
+}
+
+.container {
+    display: flex;
+    justify-content: space-between; /* Space between left and right sections */
+    align-items: flex-start; /* Align items at the start */
+    max-width: 1500px; /* Increased maximum width */
+    width: 500%; /* Full width */
+}
+
+.footer h3 {
+    color: white; /* Set font color for the heading */
+    font-family: 'Poppins', sans-serif; /* Modern Google font */
+    font-size: 3rem; /* Increased font size */
+    margin: 0; /* Remove default margin */
+}
+
+.footer p {
+    font-size: 1.25rem; /* Increase font size for text */
+    color: white; /* Set font color to white */
+}
+.font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+.no-bullets {
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove padding */
+}
+
+.no-bullets li {
+    font-size: 1.5rem; /* Increase font size */
+    color: white; /* Set font color */
+    cursor: pointer; /* Cursor pointer on hover */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.no-bullets li:hover {
+    color: #FF00FF; /* Change color on hover */
+}
+
+.btn-primary {
+    padding: 15px 30px; /* Increase button size */
+    border-radius: 30px; /* Rounded button corners */
+    cursor: pointer; /* Pointer on hover */
+    font-size: 1.25rem; /* Increase font size */
+    color: white; /* Button text color */
+    background-color: #a09d94; /* Primary button color */
+    margin-top: 10px; /* Space above the button */
+}
+
+.btn-primary:hover {
+    opacity: 0.8; /* Button hover effect */
+}
+
+.footer img {
+    width: 80px; /* Increase parking symbol size */
+    height: 80px; /* Set height for parking symbol */
+    margin-left: 10px; /* Space between text and image */
+}
+
+.social-icon {
+    margin: 0 10px; /* Space between social icons */
+    padding: 10px; /* Padding for social icons */
+    background-color: white; /* Background color for icons */
+    border-radius: 50%; /* Rounded icons */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+}
+
+.social-icon:hover {
+    background-color: currentColor; /* Change background to the icon color on hover */
+    color: white; /* Change text color to white on hover */
+}
+
+.footer-note {
+    font-size: 1.25rem; /* Increase font size for footer note */
+    text-align: center; /* Center align footer note */
+    margin-top: 20px; /* Space above footer note */
+}

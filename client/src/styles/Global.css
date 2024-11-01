@@ -1,0 +1,32 @@
+
+* {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Small Devices (Portrait Phones)  */
+  @media (max-width: 480px) {
+    body {
+      font-size: 14px;
+    }
+  }
+  
+  /* Medium Devices (Tablets) */
+  @media (max-width: 768px) {
+    body {
+      font-size: 16px;
+    }
+  }
+  
+  /* Large Devices (Desktops) */
+  @media (min-width: 1024px) {
+    body {
+      font-size: 18px;
+    }
+  }
+  
