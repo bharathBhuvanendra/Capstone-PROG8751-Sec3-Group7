@@ -1,24 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { motion } from 'framer-motion';
+import axios from 'axios';
 import '../styles/Dashboard.css';
-import axios from 'axios'; // Import axios for making HTTP requests
 
-
-
-const Dashboard = () => {
 const Dashboard = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [formData, setFormData] = useState({
     bookingDate: '',
     name: '',
     bookingDuration: '',
-    bookingDuration: '',
-    searchInput: '' // Added search input state
   });
   const navigate = useNavigate();
-  const navigate = useNavigate(); // Use for navigation
 
   const slots = [
     'A1', 'B1', 'C1', 'D1', 'E1',
@@ -28,7 +21,6 @@ const Dashboard = () => {
     'A5', 'B5', 'C5', 'D5', 'E5',
     'A6', 'B6', 'C6', 'D6', 'E6',
   ];
-
 
   const handleSlotSelect = (slot) => {
     setSelectedSlot(slot);
@@ -52,23 +44,18 @@ const Dashboard = () => {
       return;
     }
 
-    // Here, replace 'YOUR_USER_ID' with the actual user ID obtained from your authentication system
-    const userId = 'YOUR_USER_ID'; // You'll get this from your login or signup process
-
-    // Prepare booking details for the backend
+    const userId = 'YOUR_USER_ID'; // Replace with actual user ID from login system
     const bookingDetails = {
       slot_id: selectedSlot,
-      user_id: userId, // Using the retrieved user ID
+      user_id: userId,
       start_time: formData.bookingDate,
       end_time: new Date(new Date(formData.bookingDate).getTime() + formData.bookingDuration * 60 * 60 * 1000),
       duration: formData.bookingDuration,
     };
 
-    // Store booking details in session storage
     sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
 
     try {
-      // Send booking data to the server
       const response = await axios.post('/api/bookings', bookingDetails);
       if (response.status === 201) {
         alert("Booking confirmed!");
@@ -78,31 +65,10 @@ const Dashboard = () => {
       console.error("Error creating booking:", error);
       alert("There was an error booking the slot. Please try again.");
     }
-    if (!selectedSlot) {
-      alert("Please select a slot!");
-      return;
-    }
-
-    // Save booking information in sessionStorage
-    const bookingDetails = {
-      slot: selectedSlot,
-      name: formData.name,
-      bookingDate: formData.bookingDate,
-      bookingDuration: formData.bookingDuration,
-      timeRemaining: '1 hour',
-      slotDuration: `${formData.bookingDuration} hours`,
-    };
-
-    sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
-    
-    console.log("Booking details saved:", bookingDetails);
-    navigate('/checkout');
   };
 
   return (
     <div className="dashboard-container">
-      <h1 className="dashboard-title">Book your parking slot</h1>
-    <div className="dashboard-container"> {/* Updated class name */}
       <h1 className="dashboard-title">Book your parking slot</h1>
 
       <div className="booking-grid">
@@ -120,9 +86,7 @@ const Dashboard = () => {
       </div>
 
       <div className="slot-info">
-        {selectedSlot && (
-          <p>Slot Selected: <strong>{selectedSlot}</strong></p>
-        )}
+        {selectedSlot && <p>Slot Selected: <strong>{selectedSlot}</strong></p>}
       </div>
 
       <form className="booking-form">
@@ -177,5 +141,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
 export default Dashboard;

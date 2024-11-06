@@ -3,8 +3,7 @@ import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom'; 
 import Logo from './Logo';
 import '../styles/Navbar.css'; 
-import '../styles/Global.css';
-import '../styles/Global.css';
+import '../styles/Global.css'; // This import was duplicated, removed the redundant one
 
 const Navbar = () => {
   return (
@@ -20,24 +19,16 @@ const Navbar = () => {
           <h1 className="navbar-title">PARK-A-LOT</h1>
         </div>
       </NavLink>
-      <NavLink to="/" >
-        <div className="logo-container">
-          <Logo /> 
-          <h1 className="navbar-title">PARK-A-LOT</h1>
-        </div>
-      </NavLink>
+      
       <ul className="nav-links">
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 
-            to="/dashboard" 
             to="/dashboard" 
             className={({ isActive }) => (isActive ? 'active-link' : 'nav-link')}
           >
             Dashboard
           </NavLink>
         </motion.li>
-        
-        
 
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 
@@ -47,8 +38,7 @@ const Navbar = () => {
             My Bookings
           </NavLink>
         </motion.li>
-        
-        
+
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 
             to="/login" 
@@ -57,18 +47,17 @@ const Navbar = () => {
             Log In
           </NavLink>
         </motion.li>
-        
+
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 
             to="/admindashboard" 
             className={({ isActive }) => (isActive ? 'active-link' : 'nav-link')}
           >
-           Admin
+            Admin
           </NavLink>
         </motion.li>
       </ul>
     </motion.nav>
-    
   );
 };
 
