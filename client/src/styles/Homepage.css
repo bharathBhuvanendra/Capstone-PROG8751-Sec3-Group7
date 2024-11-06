@@ -1,0 +1,181 @@
+/* Home Page Container */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 45vh;
+  background-color: #072236;
+}
+
+/* Hero Section Styling */
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px; /* Adjust as needed */
+  position: relative;
+  color: rgb(245, 246, 249);
+  background-size: cover; /* Ensure the image covers the section */
+  background-position: center; /* Center the image */
+  min-height: 400px; /* Set a minimum height for the section */
+}
+
+.hero-content {
+  text-align: center;
+}
+
+.hero-title h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  margin-bottom: 20px;
+}
+
+/* Booking Options */
+.booking-options {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.booking-option {
+  font-size: 1.2rem;
+  color: white;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid white;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.booking-option:hover,
+.booking-option:focus {
+  border-color: #640263;
+}
+
+/* Search Bar Styling */
+.search-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.search-input {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 300px; /* Adjusted width for consistency */
+}
+
+.search-button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #640263;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Add transition for hover effect */
+}
+
+.search-button:hover {
+  background-color: #e0a800; /* Slightly darker on hover */
+}
+
+.find-parking-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  color: white;
+  background-color: #0070f3;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Add transition for hover effect */
+}
+
+.find-parking-button:hover {
+  background-color: #005bb5; /* Slightly darker on hover */
+}
+
+/* Featured Parking Locations */
+.featured-parking-section {
+  padding: 40px 20px;
+  background-color: white; /* Changed to white */
+  color: #072236; /* Updated text color to ensure visibility */
+  text-align: center;
+}
+
+.featured-parking-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.featured-locations {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+}
+
+.location-card {
+  background: #f0f0f0; /* Light gray for the cards */
+  border-radius: 8px;
+  padding: 20px;
+  width: 200px; /* Fixed width for cards */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s; /* Transition for hover effect */
+}
+
+.location-card:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.book-now-button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  background-color: #640263;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.book-now-button:hover {
+  background-color: #e0a800; /* Slightly darker on hover */
+}
+
+/* How It Works Section */
+.how-it-works-section {
+  padding: 40px 20px;
+  background-color: white; /* Changed to white */
+  color: #072236; /* Updated text color to ensure visibility */
+  text-align: center;
+}
+
+.how-it-works-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.steps {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap; /* Allow steps to wrap on smaller screens */
+}
+
+.step {
+  width: 200px; /* Fixed width for each step */
+  margin: 10px; /* Spacing between steps */
+  padding: 15px;
+  background: #f0f0f0; /* Light gray for each step */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.step h3 {
+  margin-bottom: 10px;
+}

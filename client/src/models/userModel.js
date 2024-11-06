@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/users';  // Replace with your actual API URL
+const API_URL = 'http://localhost:5001/api/users';  // Replace with your actual API URL
 
 // Function to create a new user
 export const createUser = async (userData) => {

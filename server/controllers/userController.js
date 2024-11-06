@@ -1,16 +1,14 @@
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
 // Load environment variables
 dotenv.config();
 
-// Create a new user
 exports.createUser = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;  // Destructure user data from request body
+  const { firstName, lastName, email, password, role } = req.body;
 
-  console.log('Creating user:', firstName, lastName, email, password);
   // Input validation
   if (!firstName || !lastName || !email || !password) {
     return res.status(400).json({ success: false, message: 'All fields are required' });
@@ -26,14 +24,18 @@ exports.createUser = async (req, res) => {
     // Hash the password before saving it to the database
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create and save the new user
-    const newUser = new User({ firstName, lastName, email, password: hashedPassword });
+    // Create and save the new user with the specified role
+    const newUser = new User({ 
+      firstName, 
+      lastName, 
+      email, 
+      password: hashedPassword, 
+      role: role || 'user'  // Use the provided role or default to 'user'
+    });
     const savedUser = await newUser.save();
 
-    // Respond to the frontend with a success message
     return res.status(201).json({ success: true, message: 'User created successfully', user: savedUser });
   } catch (error) {
-    // Log the error for debugging (you can use a logging library for better logging)
     console.error('Error creating user:', error);
     return res.status(500).json({ success: false, message: 'Error creating user', error: error.message });
   }
