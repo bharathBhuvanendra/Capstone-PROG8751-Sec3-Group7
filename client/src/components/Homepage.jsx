@@ -9,29 +9,29 @@ const Homepage = () => {
     <div className="home-container">
       {/* Hero Section */}
       <section
-        className="hero-section"
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          minHeight: '500px',
-        }}
-      >
-        <div className="hero-content">
-          <motion.div initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1>Reserve Parking Now & Save</h1>
-            <div className="search-container">
-              <input type="text" placeholder="Parking Slots available near me" className="search-input" />
-              <motion.button className="search-button" whileTap={{ scale: 0.95 }}>
-                Search
-              </motion.button>
-            </div>
-            <motion.button className="find-parking-button" whileTap={{ scale: 0.95 }} onClick={() => console.log("Finding parking...")}>
-              Find Parking Near Me
-            </motion.button>
-          </motion.div>
-        </div>
-      </section>
+  className="hero-section"
+  style={{
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '500px', // Ensure it has a height
+  }}
+>
+  <div className="hero-content">
+    <motion.div initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+      <h1>Reserve Parking Now & Save</h1>
+      <div className="search-container">
+        <input type="text" placeholder="Parking Slots available near me" className="search-input" />
+        <motion.button className="search-button" whileTap={{ scale: 0.95 }}>
+          Search
+        </motion.button>
+      </div>
+      <motion.button className="find-parking-button" whileTap={{ scale: 0.95 }} onClick={() => console.log("Finding parking...")}>
+        Find Parking Near Me
+      </motion.button>
+    </motion.div>
+  </div>
+</section>
 
       {/* Featured Parking Locations */}
       <section className="featured-parking-section">
