@@ -3,8 +3,7 @@ import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom'; 
 import Logo from './Logo';
 import '../styles/Navbar.css'; 
-import '../styles/Global.css'
-
+import '../styles/Global.css';
 
 const Navbar = () => {
   return (
@@ -14,19 +13,31 @@ const Navbar = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="logo-container">
-        <Logo />
-        <h1 className="navbar-title">PARK-A-LOT</h1>
-      </div>
+      <NavLink to="/" >
+        <div className="logo-container">
+          <Logo /> 
+          <h1 className="navbar-title">PARK-A-LOT</h1>
+        </div>
+      </NavLink>
       <ul className="nav-links">
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 
-            to="/" 
+            to="/dashboard" 
             className={({ isActive }) => (isActive ? 'active-link' : 'nav-link')}
           >
             Dashboard
           </NavLink>
         </motion.li>
+        
+        <motion.li whileHover={{ scale: 1.1 }}>
+          <NavLink 
+            to="/checkout" 
+            className={({ isActive }) => (isActive ? 'active-link' : 'nav-link')}
+          >
+            Checkout
+          </NavLink>
+        </motion.li>
+
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 
             to="/my-bookings" 
@@ -35,6 +46,7 @@ const Navbar = () => {
             My Bookings
           </NavLink>
         </motion.li>
+        
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 
             to="/login" 
