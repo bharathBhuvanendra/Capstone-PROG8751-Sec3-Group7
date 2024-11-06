@@ -26,13 +26,15 @@ mongoose.connect(process.env.MONGO_URI)
 // Import routes
 const userRoutes = require('./routes/userRoutes');
 const parkingSlotRoutes = require('./routes/parkingslotRoutes');
-
+const bookingRoutes = require('./routes/bookingRoutes');
+// Middleware to parse JSON
+app.use(express.json());
 // Use routes
 app.use('/api/users', userRoutes);
 app.use('/api/parking-slots', parkingSlotRoutes);
-
+app.use('/api/bookings', bookingRoutes);
 // Start server
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
