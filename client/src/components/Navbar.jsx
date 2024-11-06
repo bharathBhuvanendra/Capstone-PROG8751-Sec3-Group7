@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Logo from './Logo';
 import '../styles/Navbar.css'; 
 import '../styles/Global.css';
+import '../styles/Global.css';
 
 const Navbar = () => {
   return (
@@ -19,9 +20,16 @@ const Navbar = () => {
           <h1 className="navbar-title">PARK-A-LOT</h1>
         </div>
       </NavLink>
+      <NavLink to="/" >
+        <div className="logo-container">
+          <Logo /> 
+          <h1 className="navbar-title">PARK-A-LOT</h1>
+        </div>
+      </NavLink>
       <ul className="nav-links">
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 
+            to="/dashboard" 
             to="/dashboard" 
             className={({ isActive }) => (isActive ? 'active-link' : 'nav-link')}
           >
@@ -39,6 +47,7 @@ const Navbar = () => {
             My Bookings
           </NavLink>
         </motion.li>
+        
         
         <motion.li whileHover={{ scale: 1.1 }}>
           <NavLink 

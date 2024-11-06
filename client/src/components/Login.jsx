@@ -26,6 +26,7 @@ const Login = () => {
       const response = await loginUser(formData);  // Make API call
 
       if (response.success) {
+        localStorage.setItem('token', response.token); // Store the token
         alert('Login successful!');
         navigate('/dashboard');  // Redirect to dashboard after successful login
       } else {

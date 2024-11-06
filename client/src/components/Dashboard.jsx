@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { motion } from 'framer-motion';
-import '../styles/Dashboard.css'; 
+import '../styles/Dashboard.css';
+import axios from 'axios'; // Import axios for making HTTP requests
 
+
+
+const Dashboard = () => {
 const Dashboard = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [formData, setFormData] = useState({
     bookingDate: '',
     name: '',
     bookingDuration: '',
+    bookingDuration: '',
     searchInput: '' // Added search input state
   });
+  const navigate = useNavigate();
   const navigate = useNavigate(); // Use for navigation
 
   const slots = [
@@ -22,8 +29,9 @@ const Dashboard = () => {
     'A6', 'B6', 'C6', 'D6', 'E6',
   ];
 
+
   const handleSlotSelect = (slot) => {
-    setSelectedSlot(slot); 
+    setSelectedSlot(slot);
   };
 
   const handleInputChange = (e) => {
@@ -33,12 +41,43 @@ const Dashboard = () => {
     });
   };
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (!formData.bookingDate || !formData.name || !formData.bookingDuration) {
       alert("Please fill out all fields!");
       return;
     }
 
+    if (!selectedSlot) {
+      alert("Please select a slot!");
+      return;
+    }
+
+    // Here, replace 'YOUR_USER_ID' with the actual user ID obtained from your authentication system
+    const userId = 'YOUR_USER_ID'; // You'll get this from your login or signup process
+
+    // Prepare booking details for the backend
+    const bookingDetails = {
+      slot_id: selectedSlot,
+      user_id: userId, // Using the retrieved user ID
+      start_time: formData.bookingDate,
+      end_time: new Date(new Date(formData.bookingDate).getTime() + formData.bookingDuration * 60 * 60 * 1000),
+      duration: formData.bookingDuration,
+    };
+
+    // Store booking details in session storage
+    sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+
+    try {
+      // Send booking data to the server
+      const response = await axios.post('/api/bookings', bookingDetails);
+      if (response.status === 201) {
+        alert("Booking confirmed!");
+        navigate('/checkout', { state: { slotDetails: bookingDetails } });
+      }
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      alert("There was an error booking the slot. Please try again.");
+    }
     if (!selectedSlot) {
       alert("Please select a slot!");
       return;
@@ -61,16 +100,18 @@ const Dashboard = () => {
   };
 
   return (
+    <div className="dashboard-container">
+      <h1 className="dashboard-title">Book your parking slot</h1>
     <div className="dashboard-container"> {/* Updated class name */}
       <h1 className="dashboard-title">Book your parking slot</h1>
 
       <div className="booking-grid">
         {slots.map((slot, index) => (
-          <motion.div 
-            key={index} 
+          <motion.div
+            key={index}
             className={`slot ${selectedSlot === slot ? 'selected' : ''}`}
-            onClick={() => handleSlotSelect(slot)} 
-            initial={{ opacity: 0, scale: 0.95 }} 
+            onClick={() => handleSlotSelect(slot)}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
           >
             {slot}
@@ -87,10 +128,10 @@ const Dashboard = () => {
       <form className="booking-form">
         <div className="form-group">
           <label htmlFor="bookingDate">Booking Date:</label>
-          <input 
-            type="date" 
-            id="bookingDate" 
-            name="bookingDate" 
+          <input
+            type="date"
+            id="bookingDate"
+            name="bookingDate"
             value={formData.bookingDate}
             onChange={handleInputChange}
             required
@@ -99,9 +140,9 @@ const Dashboard = () => {
 
         <div className="form-group">
           <label htmlFor="name">Name:</label>
-          <input 
-            type="text" 
-            id="name" 
+          <input
+            type="text"
+            id="name"
             name="name"
             value={formData.name}
             onChange={handleInputChange}
@@ -112,9 +153,9 @@ const Dashboard = () => {
 
         <div className="form-group">
           <label htmlFor="bookingDuration">Booking Duration (hours):</label>
-          <input 
-            type="number" 
-            id="bookingDuration" 
+          <input
+            type="number"
+            id="bookingDuration"
             name="bookingDuration"
             value={formData.bookingDuration}
             onChange={handleInputChange}
@@ -123,9 +164,9 @@ const Dashboard = () => {
           />
         </div>
 
-        <motion.button 
+        <motion.button
           className="book-button"
-          whileTap={{ scale: 0.95 }}  
+          whileTap={{ scale: 0.95 }}
           type="button"
           onClick={handleBooking}
         >
@@ -136,4 +177,5 @@ const Dashboard = () => {
   );
 };
 
+export default Dashboard;
 export default Dashboard;

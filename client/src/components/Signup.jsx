@@ -3,20 +3,26 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import '../styles/Signup.css';
 import '../styles/Global.css';
-import { createUser } from '../models/userModel';  // Import the API function
+import { createUser } from '../models/userModel'; // Import the API function
 
 const Signup = () => {
   // State to manage form inputs
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    // username: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
 
-  const [error, setError] = useState('');
+  // State to manage individual error messages
+  const [errors, setErrors] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -26,12 +32,46 @@ const Signup = () => {
     });
   };
 
+  // Validation checks
+  const validateForm = () => {
+    const newErrors = {};
+    const { firstName, lastName, email, password, confirmPassword } = formData;
+
+    // Check first name
+    if (!/^[A-Za-z]+$/.test(firstName)) {
+      newErrors.firstName = 'First name should contain only alphabets';
+    }
+
+    // Check last name
+    if (!/^[A-Za-z]+$/.test(lastName)) {
+      newErrors.lastName = 'Last name should contain only alphabets';
+    }
+
+    // Check email format
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    // Check password length
+    if (password.length < 8) {
+      newErrors.password = 'Password should be at least 8 characters long';
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match!';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match!');
+    // Run validations
+    if (!validateForm()) {
       return;
     }
 
@@ -40,7 +80,6 @@ const Signup = () => {
       const response = await createUser({
         firstName: formData.firstName,
         lastName: formData.lastName,
-        // username: formData.username,
         email: formData.email,
         password: formData.password,
       });
@@ -49,10 +88,10 @@ const Signup = () => {
         alert('User created successfully!');
         // Optionally, redirect to login page
       } else {
-        setError(response.message || 'Failed to create user');
+        setErrors({ form: response.message || 'Failed to create user' });
       }
     } catch (error) {
-      setError('An error occurred while creating the user');
+      setErrors({ form: 'An error occurred while creating the user' });
     }
   };
 
@@ -66,7 +105,7 @@ const Signup = () => {
       >
         <h2 className="signup-title">Create an Account</h2>
 
-        {error && <p className="error-text">{error}</p>}  {/* Display error messages */}
+        {errors.form && <p className="error-text">{errors.form}</p>} {/* Display form error messages */}
 
         <form className="space-y-8" onSubmit={handleSubmit}>
           <div className="input-container">
@@ -82,6 +121,7 @@ const Signup = () => {
               onChange={handleInputChange}
               required
             />
+            {errors.firstName && <p className="error-text">{errors.firstName}</p>}
           </div>
 
           <div className="input-container">
@@ -97,22 +137,8 @@ const Signup = () => {
               onChange={handleInputChange}
               required
             />
+            {errors.lastName && <p className="error-text">{errors.lastName}</p>}
           </div>
-
-          {/* <div className="input-container">
-            <label className="input-label" htmlFor="username">
-              Username
-            </label>
-            <input 
-              className="input-field"
-              id="username"
-              type="text"
-              placeholder="Enter your username"
-              value={formData.username}
-              onChange={handleInputChange}
-              required
-            />
-          </div> */}
 
           <div className="input-container">
             <label className="input-label" htmlFor="email">
@@ -127,6 +153,7 @@ const Signup = () => {
               onChange={handleInputChange}
               required
             />
+            {errors.email && <p className="error-text">{errors.email}</p>}
           </div>
 
           <div className="input-container">
@@ -142,6 +169,7 @@ const Signup = () => {
               onChange={handleInputChange}
               required
             />
+            {errors.password && <p className="error-text">{errors.password}</p>}
           </div>
 
           <div className="input-container">
@@ -157,6 +185,7 @@ const Signup = () => {
               onChange={handleInputChange}
               required
             />
+            {errors.confirmPassword && <p className="error-text">{errors.confirmPassword}</p>}
           </div>
 
           <div className="flex items-center justify-between">

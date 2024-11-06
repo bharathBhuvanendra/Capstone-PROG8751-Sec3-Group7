@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #072236;
+  background-color: #f5f5f5;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -25,7 +25,7 @@
 .navbar-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #eeeaea;
+  color: #ffffff;
   margin-left: 10px; /* Space between logo and title */
 }
 
@@ -42,7 +42,7 @@
 
 .nav-links a {
   text-decoration: none;
-  color: #eeeaea;
+  color: #fffafa;
   font-weight: bold;
   transition: color 0.3s ease;
 }
@@ -54,7 +54,7 @@
 }
 
 .nav-links a:hover {
-  color: #e0a800; /* Change color on hover */
+  color: #5b9395; /* Change color on hover */
 }
 
 /* Responsive Styles */
