@@ -13,7 +13,9 @@ const AdminDashboard = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(API_URL);
-      setUsers(response.data);
+      // Ensure users is set as an array
+      const usersData = Array.isArray(response.data) ? response.data : response.data.users || [];
+      setUsers(usersData);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -25,7 +27,7 @@ const AdminDashboard = () => {
   const handleCreateUser = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(API_URL + '/signup', newUser);
+      await axios.post(`${API_URL}/signup`, newUser);
       fetchUsers(); // Refresh user list after creating a user
       setNewUser({ firstName: '', lastName: '', email: '', password: '', role: '' }); // Reset form
     } catch (error) {
