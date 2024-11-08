@@ -1,43 +1,47 @@
 .dashboard-container {
   padding: 20px;
   text-align: center;
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }
 
 .dashboard-title {
   font-size: 2rem;
   margin-bottom: 20px;
+  color: #343a40;
 }
 
-.booking-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); 
-  gap: 10px; 
+.parking-lot-selection {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-.slot {
-  background-color: #f0f0f0;
-  border: 2px solid #000000;
+.parking-lot-card {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
   border-radius: 8px;
   padding: 20px;
-  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: background-color 0.2s ease; 
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.parking-lot-card:hover {
+  transform: translateY(-5px);
+}
+
+.selected-lot {
+  background-color: #d1e7dd;
+  border: 3px solid #151515;
+}
+
+.selected-message {
+  margin-top: 10px;
   font-weight: bold;
-}
-
-.slot.selected {
-  background-color: #000000;
-  color: white;
-}
-
-.slot:hover {
-  background-color: #e0e0e0;
-}
-
-.slot-info {
-  margin-top: 20px;
-  font-size: 1.25rem;
+  color: #151515;
 }
 
 .booking-form {
@@ -67,31 +71,6 @@
   border: 1px solid #ccc;
 }
 
-.search-container {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.search-input {
-  padding: 12px;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 300px; /* Adjust as needed */
-}
-
-.search-button {
-  padding: 12px 20px;
-  font-size: 1rem;
-  color: white;
-  background-color: #ffbf00;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .book-button {
   background-color: #000000;
   color: white;
@@ -104,26 +83,5 @@
 }
 
 .book-button:hover {
-  background-color: #333; 
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .booking-grid {
-      grid-template-columns: repeat(3, 1fr);
-  }
-
-  .slot {
-      padding: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .booking-grid {
-      grid-template-columns: repeat(2, 1fr);
-  }
-
-  .slot {
-      padding: 10px;
-  }
+  background-color: #333;
 }
