@@ -1,15 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion'; 
-import '../styles/MyBookings.css'; 
+import { motion } from 'framer-motion';
+import '../styles/MyBookings.css';
 import '../styles/Global.css';
+import { getBookings } from '../models/bookingModel';  // Import the correct API call function
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    // Retrieve bookings from sessionStorage
-    const storedBookings = JSON.parse(sessionStorage.getItem('myBookings')) || [];
-    setBookings(storedBookings);
+    const fetchBookings = async () => {
+      try {
+        const user_id = sessionStorage.getItem('userId'); // Retrieve user_id from localStorage
+        if (!user_id) {
+          alert('User not logged in. Please log in to continue.');
+          return;
+        }
+
+        const response = await getBookings();  // Make API call
+        if (response.success) {
+          setBookings(response.bookings);
+        } else {
+          console.error(response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBookings();
   }, []);
 
   return (
@@ -19,17 +37,20 @@ const MyBookings = () => {
       {bookings.length > 0 ? (
         <div className="bookings-list">
           {bookings.map((booking, index) => (
-            <motion.div 
-              key={index} 
+            <motion.div
+              key={index}
               className="booking-card"
-              initial={{ opacity: 0, scale: 0.95 }} 
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }} 
+              transition={{ duration: 0.3 }}
             >
               <div className="booking-details">
-                <p><strong>Slot:</strong> {booking.slot}</p>
-                <p><strong>Booking Date:</strong> {booking.bookingDate}</p>
-                <p><strong>Duration:</strong> {booking.bookingDuration} hours</p>
+                {/* <p><strong>Slot:</strong> {booking.slot_id?.name}</p> */}
+                {/* <p><strong>Location:</strong> {booking.slot_id?.location}</p> */}
+                <p><strong>Name:</strong> {booking.Name}</p>
+                <p><strong>Booking Date:</strong> {new Date(booking.Date).toLocaleDateString()}</p>
+                <p><strong>Car Model:</strong> {booking.car_model}</p>
+                <p><strong>Plate Number:</strong> {booking.plate_number}</p>
               </div>
             </motion.div>
           ))}

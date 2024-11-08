@@ -29,28 +29,28 @@ const Login = () => {
     }
 
 
-  try {
-    const response = await loginUser(formData);  // Make API call
+    try {
+      const response = await loginUser(formData);  // Make API call
     
     console.log('response data:', response);
 
-    if (response.success) {
-      localStorage.setItem('token', response.token); // Store the token
+      if (response.success) {
+        localStorage.setItem('token', response.token); // Store the token
       sessionStorage.setItem('userId', response.userId);
-      alert('Login successful!');
+        alert('Login successful!');
       if (response.role === 'admin') {
         navigate('/admindashboard');
       } else {
         navigate('/dashboard');  // Redirect to dashboard after successful login
       }
-    } else {
-      setError(response.message || 'Failed to log in');
-    }
-  } catch (error) {
+      } else {
+        setError(response.message || 'Failed to log in');
+      }
+    } catch (error) {
     console.error('Error during login:', error);
-    setError('An error occurred while logging in');
-  }
-};
+      setError('An error occurred while logging in');
+    }
+  };
 
 
   return (
@@ -115,5 +115,6 @@ const Login = () => {
     </div>
   );
 };
+
 
 export default Login;
