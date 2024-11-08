@@ -4,6 +4,7 @@
   flex-direction: column;
   min-height: 45vh;
   background-color: #072236;
+  font-family: Montserrat, serif;
 }
 
 /* Hero Section Styling */
@@ -114,7 +115,8 @@
 
 .featured-locations {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  margin: 3rem 0;
   gap: 20px;
   flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
 }

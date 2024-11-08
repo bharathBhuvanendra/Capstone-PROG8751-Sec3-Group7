@@ -3,8 +3,6 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Dashboard.css';
 
-
-
 const Dashboard = () => {
     const parkingLots = [
         { name: 'Lot A', location: 'Downtown', availableLots: 20 },
@@ -31,49 +29,54 @@ const Dashboard = () => {
     };
 
     const handleBooking = () => {
-      if (!selectedLot) {
-          alert("Please select a parking lot!");
-          return;
-      }
-      if (!formData.bookingDate || !formData.name || !formData.bookingDuration || !formData.carModel || !formData.plateNumber) {
-          alert("Please fill out all fields!");
-          return;
-      }
-      const bookingDetails = {
-          slot: selectedLot.name,
-          slotId: selectedLot.id, // Make sure this ID is included
-          location: selectedLot.location,
-          name: formData.name,
-          bookingDate: formData.bookingDate,
-          bookingDuration: formData.bookingDuration,
-          carModel: formData.carModel,
-          plateNumber: formData.plateNumber
-      };
-      sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
-      navigate('/checkout', { state: { slotDetails: bookingDetails } });
-  };
+        if (!selectedLot) {
+            alert("Please select a parking lot!");
+            return;
+        }
+        if (!formData.bookingDate || !formData.name || !formData.bookingDuration || !formData.carModel || !formData.plateNumber) {
+            alert("Please fill out all fields!");
+            return;
+        }
+        const bookingDetails = {
+            slot: selectedLot.name,
+            slotId: selectedLot.id, // Make sure this ID is included
+            location: selectedLot.location,
+            name: formData.name,
+            bookingDate: formData.bookingDate,
+            bookingDuration: formData.bookingDuration,
+            carModel: formData.carModel,
+            plateNumber: formData.plateNumber
+        };
+        sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+        navigate('/checkout', { state: { slotDetails: bookingDetails } });
+    };
 
     return (
         <div className="dashboard-container">
-            <h1 className="dashboard-title">Parking Lot Dashboard</h1>
-            <div className="parking-lot-selection">
+            <h1 className="dashboard-title" aria-label="Parking Lot Dashboard">Parking Lot Dashboard</h1>
+            <div className="parking-lot-selection" role="list" aria-label="Select a parking lot">
                 {parkingLots.map((lot, index) => (
                     <motion.div
                         key={index}
                         className={`parking-lot-card ${selectedLot && selectedLot.name === lot.name ? 'selected-lot' : ''}`}
                         onClick={() => setSelectedLot(lot)}
                         whileTap={{ scale: 0.95 }}
+                        role="listitem"
+                        aria-selected={selectedLot && selectedLot.name === lot.name}
+                        aria-labelledby={`lot-${index}-name`}
                     >
-                        <h2>{lot.name}</h2>
-                        <p>Location: {lot.location}</p>
-                        <p>Available Lots: {lot.availableLots}</p>
-                        {selectedLot && selectedLot.name === lot.name }
+                        <h2 id={`lot-${index}-name`}>{lot.name}</h2>
+                        <p><strong>Location:</strong> {lot.location}</p>
+                        <p><strong>Available Lots:</strong> {lot.availableLots}</p>
                     </motion.div>
                 ))}
             </div>
 
             {selectedLot && (
-                <form className="booking-form">
+                <form className="booking-form" aria-labelledby="form-title" aria-describedby="form-description">
+                    <h2 id="form-title">Booking Form</h2>
+                    <p id="form-description">Please fill out the form to book your parking slot at {selectedLot.name}.</p>
+
                     <div className="form-group">
                         <label htmlFor="bookingDate">Booking Date:</label>
                         <input
@@ -83,6 +86,7 @@ const Dashboard = () => {
                             value={formData.bookingDate}
                             onChange={handleInputChange}
                             required
+                            aria-required="true"
                         />
                     </div>
 
@@ -96,6 +100,7 @@ const Dashboard = () => {
                             onChange={handleInputChange}
                             placeholder="Enter your name"
                             required
+                            aria-required="true"
                         />
                     </div>
 
@@ -109,6 +114,7 @@ const Dashboard = () => {
                             onChange={handleInputChange}
                             placeholder="Enter duration in hours"
                             required
+                            aria-required="true"
                         />
                     </div>
 
@@ -122,6 +128,7 @@ const Dashboard = () => {
                             onChange={handleInputChange}
                             placeholder="Enter your car model"
                             required
+                            aria-required="true"
                         />
                     </div>
 
@@ -135,6 +142,7 @@ const Dashboard = () => {
                             onChange={handleInputChange}
                             placeholder="Enter your plate number"
                             required
+                            aria-required="true"
                         />
                     </div>
 
@@ -143,6 +151,7 @@ const Dashboard = () => {
                         whileTap={{ scale: 0.95 }}
                         type="button"
                         onClick={handleBooking}
+                        aria-label="Book parking slot"
                     >
                         Book Slot
                     </motion.button>

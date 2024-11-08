@@ -10,7 +10,7 @@ const MyBookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const user_id = sessionStorage.getItem('userId'); // Retrieve user_id from localStorage
+        const user_id = sessionStorage.getItem('userId'); // Retrieve user_id from sessionStorage
         if (!user_id) {
           alert('User not logged in. Please log in to continue.');
           return;
@@ -31,11 +31,11 @@ const MyBookings = () => {
   }, []);
 
   return (
-    <div className="my-bookings-container">
-      <h1 className="my-bookings-title">My Bookings</h1>
+    <div className="my-bookings-container" aria-live="polite">
+      <h1 className="my-bookings-title" aria-label="My Bookings">My Bookings</h1>
 
       {bookings.length > 0 ? (
-        <div className="bookings-list">
+        <div className="bookings-list" aria-label="List of bookings" role="list">
           {bookings.map((booking, index) => (
             <motion.div
               key={index}
@@ -43,20 +43,28 @@ const MyBookings = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
+              role="listitem" 
+              aria-labelledby={`booking-${index}`}
             >
               <div className="booking-details">
-                {/* <p><strong>Slot:</strong> {booking.slot_id?.name}</p> */}
-                {/* <p><strong>Location:</strong> {booking.slot_id?.location}</p> */}
-                <p><strong>Name:</strong> {booking.Name}</p>
-                <p><strong>Booking Date:</strong> {new Date(booking.Date).toLocaleDateString()}</p>
-                <p><strong>Car Model:</strong> {booking.car_model}</p>
-                <p><strong>Plate Number:</strong> {booking.plate_number}</p>
+                <p id={`booking-${index}`} aria-labelledby={`booking-${index}-name`}>
+                  <strong>Name:</strong> {booking.Name}
+                </p>
+                <p id={`booking-${index}-date`} aria-labelledby={`booking-${index}-date`}>
+                  <strong>Booking Date:</strong> {new Date(booking.Date).toLocaleDateString()}
+                </p>
+                <p id={`booking-${index}-car-model`} aria-labelledby={`booking-${index}-car-model`}>
+                  <strong>Car Model:</strong> {booking.car_model}
+                </p>
+                <p id={`booking-${index}-plate-number`} aria-labelledby={`booking-${index}-plate-number`}>
+                  <strong>Plate Number:</strong> {booking.plate_number}
+                </p>
               </div>
             </motion.div>
           ))}
         </div>
       ) : (
-        <p className="no-bookings-message">You have no bookings yet.</p>
+        <p className="no-bookings-message" aria-label="No bookings">You have no bookings yet.</p>
       )}
     </div>
   );
