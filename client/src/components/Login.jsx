@@ -18,24 +18,33 @@ const Login = () => {
     });
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+// Handle form submission
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const response = await loginUser(formData);  // Make API call
+  try {
+    const response = await loginUser(formData);  // Make API call
+    
+    console.log('response data:', response);
 
-      if (response.success) {
-        localStorage.setItem('token', response.token); // Store the token
-        alert('Login successful!');
-        navigate('/dashboard');  // Redirect to dashboard after successful login
+    if (response.success) {
+      localStorage.setItem('token', response.token); // Store the token
+      sessionStorage.setItem('userId', response.userId);
+      alert('Login successful!');
+      if (response.role === 'admin') {
+        navigate('/admindashboard');
       } else {
-        setError(response.message || 'Failed to log in');
+        navigate('/dashboard');  // Redirect to dashboard after successful login
       }
-    } catch (error) {
-      setError('An error occurred while logging in');
+    } else {
+      setError(response.message || 'Failed to log in');
     }
-  };
+  } catch (error) {
+    console.error('Error during login:', error);
+    setError('An error occurred while logging in');
+  }
+};
+
 
   return (
     <div className="login-container">

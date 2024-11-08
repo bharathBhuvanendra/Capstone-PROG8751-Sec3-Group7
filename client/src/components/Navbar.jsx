@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom'; 
+import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
-import '../styles/Navbar.css'; 
-import '../styles/Global.css'; // This import was duplicated, removed the redundant one
+import '../styles/Navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token') || '';
+  
+
+  // Handle log out action
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove token from localStorage
+    sessionStorage.removeItem('userId'); // Remove userId from sessionStorage
+    navigate('/login'); // Redirect to login page
+  };
+
   return (
     <motion.nav 
       className="navbar"
@@ -40,21 +50,18 @@ const Navbar = () => {
         </motion.li>
 
         <motion.li whileHover={{ scale: 1.1 }}>
-          <NavLink 
-            to="/login" 
-            className={({ isActive }) => (isActive ? 'active-link' : 'nav-link')}
-          >
-            Log In
-          </NavLink>
-        </motion.li>
-
-        <motion.li whileHover={{ scale: 1.1 }}>
-          <NavLink 
-            to="/admindashboard" 
-            className={({ isActive }) => (isActive ? 'active-link' : 'nav-link')}
-          >
-            Admin
-          </NavLink>
+          {token ? (
+            <button onClick={handleLogout} className="nav-link logout-button">
+              Log Out
+            </button>
+          ) : (
+            <NavLink 
+              to="/login" 
+              className={({ isActive }) => (isActive ? 'active-link' : 'nav-link')}
+            >
+              Log In
+            </NavLink>
+          )}
         </motion.li>
       </ul>
     </motion.nav>
