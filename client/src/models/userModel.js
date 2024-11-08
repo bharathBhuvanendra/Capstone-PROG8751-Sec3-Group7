@@ -43,7 +43,7 @@ export const loginUser = async (userData) => {
       return { success: false, message: data.message || 'Login failed' };
     }
 
-    return { success: true, token: data.token, userId: data.userId };  // Return token and user ID
+    return { success: true, message: 'Login successful', role: data.role, token: data.token, userId: data.userId };  // Return token and user ID
   } catch (error) {
     console.error('Error logging in:', error);
     return { success: false, message: 'An error occurred while logging in' };
