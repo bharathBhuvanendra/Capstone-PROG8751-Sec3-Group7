@@ -18,9 +18,16 @@ const Login = () => {
     });
   };
 
-// Handle form submission
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+
+    if (!/^[\w-.]+@([\w-]+\.)+com$/.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
 
   try {
     const response = await loginUser(formData);  // Make API call
