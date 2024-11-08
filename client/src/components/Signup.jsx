@@ -47,11 +47,9 @@ const Signup = () => {
       newErrors.lastName = 'Last name should contain only alphabets';
     }
 
-    // Check email format
-    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    if (!/^[\w-.]+@([\w-]+\.)+com$/.test(email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-
     // Check password length
     if (password.length < 8) {
       newErrors.password = 'Password should be at least 8 characters long';
