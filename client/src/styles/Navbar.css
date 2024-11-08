@@ -3,10 +3,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #3a6fd1;
+  background-color: #033669;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  font-family: Montserrat, serif;
+  font-size: 1.5rem;
 }
 
+a{
+ text-decoration: none;
+}
 /* Logo.css */
 .logo {
   width: 100px; /* Adjust the width as needed */
@@ -20,13 +26,15 @@
 .logo-container {
   display: flex;
   align-items: center; /* Center logo and title vertically */
+  margin: .5rem;
 }
 
 .navbar-title {
   font-size: 1.5rem;
   font-weight: bold;
   color: #ffffff;
-  margin-left: 10px; /* Space between logo and title */
+  margin-left: 1rem; /* Space between logo and title */
+  font-size: 2rem;
 }
 
 .nav-links {
@@ -55,6 +63,12 @@
 
 .nav-links a:hover {
   color: #5b9395; /* Change color on hover */
+}
+
+.logout-button {
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 /* Responsive Styles */

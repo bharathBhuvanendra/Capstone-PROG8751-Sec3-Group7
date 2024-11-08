@@ -18,6 +18,7 @@
     margin-right: 105px;
     position: relative;
     overflow: hidden;
+    font-family: Montserrat, serif;
 }
 
 .footer-background-image {
@@ -51,26 +52,6 @@
     transform: scale(7.9); /* Adjust scale for desired size */
     background-position: bottom left; /* Position at bottom left */
     background-repeat: no-repeat; /* Prevent image from repeating */
-}
-
-
-
-
-
-
-
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    max-width: 1500px;
-    width: 100%; /* Changed from 500% to 100% */
-    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-    justify-content: space-between;
-    align-items: flex-start;
-    max-width: 1500px;
-    width: 100%; /* Changed from 500% to 100% */
-    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
 }
 
 .footer h3 {
@@ -190,6 +171,7 @@
 
 .footer .social-icons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
@@ -202,9 +184,13 @@
     margin-top: 20px;
 }
 
+li a { 
+    color: white;
+}
 /* Added to properly center the center-bottom section */
 .footer .center-bottom {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -220,5 +206,53 @@
 }
 
 .footer .social-icons a {
-    margin: 0 10px; /* Spacing between social icons */
+    margin: 10px 10px; /* Spacing between social icons */
 }
+
+@media (max-width: 768px) { /* Adjust the max-width as needed for your mobile breakpoint */
+    .footer {
+      margin: 1rem;
+    }
+
+    h3, p, button, li{
+        text-align: center;
+    }
+
+    .items-end{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1920px) {
+    h3, p, button, li{
+        text-align: center;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .items-end{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+  }
+
+  @media (min-width: 1921px)
+  {
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        max-width: 1500px;
+        width: 100%; /* Changed from 500% to 100% */
+        flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+        align-items: flex-start;
+    }
+  }

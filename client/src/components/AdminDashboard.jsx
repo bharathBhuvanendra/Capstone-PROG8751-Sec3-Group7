@@ -53,21 +53,64 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <h1>Admin Dashboard</h1>
-      <form onSubmit={handleCreateUser}>
-        <input type="text" placeholder="First Name" value={newUser.firstName} onChange={e => setNewUser({ ...newUser, firstName: e.target.value })} required />
-        <input type="text" placeholder="Last Name" value={newUser.lastName} onChange={e => setNewUser({ ...newUser, lastName: e.target.value })} required />
-        <input type="email" placeholder="Email" value={newUser.email} onChange={e => setNewUser({ ...newUser, email: e.target.value })} required />
-        <input type="password" placeholder="Password" value={newUser.password} onChange={e => setNewUser({ ...newUser, password: e.target.value })} required />
-        <select value={newUser.role} onChange={e => setNewUser({ ...newUser, role: e.target.value })}>
+      <h1 aria-label="Admin Dashboard">Admin Dashboard</h1>
+      <form onSubmit={handleCreateUser} aria-label="Create New User Form">
+        <label htmlFor="firstName" aria-label="First Name">First Name</label>
+        <input
+          id="firstName"
+          type="text"
+          placeholder="First Name"
+          value={newUser.firstName}
+          onChange={e => setNewUser({ ...newUser, firstName: e.target.value })}
+          required
+          aria-required="true"
+        />
+        <label htmlFor="lastName" aria-label="Last Name">Last Name</label>
+        <input
+          id="lastName"
+          type="text"
+          placeholder="Last Name"
+          value={newUser.lastName}
+          onChange={e => setNewUser({ ...newUser, lastName: e.target.value })}
+          required
+          aria-required="true"
+        />
+        <label htmlFor="email" aria-label="Email">Email</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="Email"
+          value={newUser.email}
+          onChange={e => setNewUser({ ...newUser, email: e.target.value })}
+          required
+          aria-required="true"
+        />
+        <label htmlFor="password" aria-label="Password">Password</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          value={newUser.password}
+          onChange={e => setNewUser({ ...newUser, password: e.target.value })}
+          required
+          aria-required="true"
+        />
+        <label htmlFor="role" aria-label="Role">Role</label>
+        <select
+          id="role"
+          value={newUser.role}
+          onChange={e => setNewUser({ ...newUser, role: e.target.value })}
+          aria-label="Select Role"
+          aria-required="true"
+        >
           <option value="">Select Role</option>
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select>
-        <button type="submit">Create User</button>
+        <button type="submit" aria-label="Create User">Create User</button>
       </form>
 
-      <table>
+      <table aria-label="User List">
         <thead>
           <tr>
             <th>First Name</th>
@@ -85,8 +128,12 @@ const AdminDashboard = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td className="actions">
-                <button onClick={() => handleDelete(user._id)}>Delete</button>
-                {/* You can add edit functionality here */}
+                <button
+                  onClick={() => handleDelete(user._id)}
+                  aria-label={`Delete ${user.firstName} ${user.lastName}`}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
