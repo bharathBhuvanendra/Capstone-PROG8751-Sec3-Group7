@@ -1,60 +1,71 @@
-import React from 'react';
-import { motion } from 'framer-motion'; 
-import '../styles/MyBookings.css'; 
-import '../styles/Global.css'
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import '../styles/MyBookings.css';
+import '../styles/Global.css';
+import { getBookings } from '../models/bookingModel';  // Import the correct API call function
 
 const MyBookings = () => {
-  const bookings = [
-    {
-      slot: 'A1',
-      bookingDate: '28th September',
-      timeRemaining: '28:49',
-      slotDuration: '45 minutes',
-    },
-    {
-      slot: 'B3',
-      bookingDate: '29th September',
-      timeRemaining: '15:20',
-      slotDuration: '30 minutes',
-    },
-    {
-      slot: 'C2',
-      bookingDate: '30th September',
-      timeRemaining: '10:12',
-      slotDuration: '1 hour',
-    }
-  ];
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const user_id = sessionStorage.getItem('userId'); // Retrieve user_id from sessionStorage
+        if (!user_id) {
+          alert('User not logged in. Please log in to continue.');
+          return;
+        }
+
+        const response = await getBookings();  // Make API call
+        if (response.success) {
+          setBookings(response.bookings);
+        } else {
+          console.error(response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
 
   return (
-    <div className="my-bookings-container">
-      <h1 className="my-bookings-title">My Bookings</h1>
+    <div className="my-bookings-container" aria-live="polite">
+      <h1 className="my-bookings-title" aria-label="My Bookings">My Bookings</h1>
 
-      <div className="bookings-list">
-        {bookings.map((booking, index) => (
-          <motion.div 
-            key={index} 
-            className="booking-card"
-            initial={{ opacity: 0, scale: 0.95 }} 
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }} 
-          >
-            <div className="booking-details">
-              <p><strong>Slot:</strong> {booking.slot}</p>
-              <p><strong>Booking Date:</strong> {booking.bookingDate}</p>
-            </div>
-
-            <div className="booking-time">
-              <p><strong>Time Remaining:</strong> {booking.timeRemaining}</p>
-              <p><strong>Slot Duration:</strong> {booking.slotDuration}</p>
-            </div>
-
-          
-            <button className="renew-button">
-              Renew Slot
-            </button>
-          </motion.div>
-        ))}
-      </div>
+      {bookings.length > 0 ? (
+        <div className="bookings-list" aria-label="List of bookings" role="list">
+          {bookings.map((booking, index) => (
+            <motion.div
+              key={index}
+              className="booking-card"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              role="listitem" 
+              aria-labelledby={`booking-${index}`}
+            >
+              <div className="booking-details">
+                <p id={`booking-${index}`} aria-labelledby={`booking-${index}-name`}>
+                  <strong>Name:</strong> {booking.Name}
+                </p>
+                <p id={`booking-${index}-date`} aria-labelledby={`booking-${index}-date`}>
+                  <strong>Booking Date:</strong> {new Date(booking.Date).toLocaleDateString()}
+                </p>
+                <p id={`booking-${index}-car-model`} aria-labelledby={`booking-${index}-car-model`}>
+                  <strong>Car Model:</strong> {booking.car_model}
+                </p>
+                <p id={`booking-${index}-plate-number`} aria-labelledby={`booking-${index}-plate-number`}>
+                  <strong>Plate Number:</strong> {booking.plate_number}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        <p className="no-bookings-message" aria-label="No bookings">You have no bookings yet.</p>
+      )}
     </div>
   );
 };
