@@ -6,9 +6,9 @@ import '../styles/Dashboard.css';
 const Dashboard = () => {
     const parkingLots = [
         { name: 'Lot A', location: 'Downtown', availableLots: 20 },
-        { name: 'Lot B', location: 'Uptown', availableLots: 15 },
+        { name: 'Lot B', location: 'Airport', availableLots: 15 },
         { name: 'Lot C', location: 'Suburb', availableLots: 25 },
-        { name: 'Lot D', location: 'City Center', availableLots: 10 },
+        { name: 'Lot D', location: 'Mall', availableLots: 10 },
     ];
 
     const [selectedLot, setSelectedLot] = useState(null);

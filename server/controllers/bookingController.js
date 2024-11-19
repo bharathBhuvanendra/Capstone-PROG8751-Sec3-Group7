@@ -3,6 +3,8 @@ const mongoose = require('mongoose');  // <-- Add this line
 const Booking = require('../models/Bookings');
 
 // Create a new booking
+
+
 exports.createBooking = async (req, res) => {
   console.log("Received booking creation request: ", req.body); // Log received data
   try {
@@ -20,10 +22,12 @@ exports.createBooking = async (req, res) => {
 
     const newBooking = new Booking({ Date, Name, user_id, car_model, plate_number });
     const booking = await newBooking.save();
-    res.status(201).json(booking);
+
+    // Updated response to match client expectations
+    res.status(201).json({ success: true, data: booking });
   } catch (error) {
     console.error("Error while creating booking: ", error); // Log the actual error
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 
