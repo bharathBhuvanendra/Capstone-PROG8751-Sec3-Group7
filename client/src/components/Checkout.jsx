@@ -4,11 +4,14 @@ import { motion } from 'framer-motion';
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import '../styles/Checkout.css';
 import { createBooking } from '../models/bookingModel';  // Import the API call function
+import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 
-const Checkout = () => {
+const Checkout = ({ clientSecret }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [bookingDetails, setBookingDetails] = useState(location.state?.slotDetails || null);
+  const stripe = useStripe();
+  const elements = useElements();
 
   useEffect(() => {
     if (!bookingDetails) {
@@ -21,41 +24,75 @@ const Checkout = () => {
     }
   }, [bookingDetails]);
 
-  const handlePayment = async () => {
+  const handlePayment = async (e) => {
+    e.preventDefault();
+
+    console.log("Pay Now button clicked. Starting payment process...");
+    console.log("Booking Details: ", bookingDetails);
+
+    if (!stripe || !elements) {
+      console.error("Stripe or Elements has not loaded yet.");
+      return; // Stripe.js has not loaded yet.
+    }
+
     try {
-      // Retrieve user_id from localStorage (assuming user is logged in)
-      const user_id = sessionStorage.getItem('userId');
-      if (!user_id) {
-        alert('User not logged in. Please log in to continue.');
-        navigate('/login'); // Redirect to login page if user is not logged in
-        return;
-      }
-  
-      // Prepare booking data
-      const bookingData = {
-        Date: bookingDetails.bookingDate,
-        Name: bookingDetails.name,
-        user_id: user_id,
-        car_model: bookingDetails.carModel,
-        plate_number: bookingDetails.plateNumber
-      };
-  
-      // Make API call to store booking in the database
-      const response = await createBooking(bookingData);
-      console.log("API response:", response);
-  
-      if (response.success) {
-        alert("Booking confirmed!");
-        navigate('/my-bookings'); // Redirect to My Bookings page after confirmation
+      // Confirm the card payment
+      console.log("Confirming card payment with clientSecret:", clientSecret);
+
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/my-bookings`,  // Add return_url to redirect after payment
+        },
+        redirect: 'if_required',
+      });
+
+      if (result.error) {
+        console.error("Error processing payment: ", result.error.message);
+        alert(result.error.message);
       } else {
-        alert("Failed to create booking. Please try again.");
+        if (result.paymentIntent.status === 'succeeded') {
+          console.log('Payment successful! PaymentIntent:', result.paymentIntent);
+          alert('Payment successful!');
+          
+          // Retrieve user_id from sessionStorage (assuming user is logged in)
+          const user_id = sessionStorage.getItem('userId');
+          if (!user_id) {
+            alert('User not logged in. Please log in to continue.');
+            navigate('/login'); // Redirect to login page if user is not logged in
+            return;
+          }
+      
+          // Prepare booking data
+          const bookingData = {
+            Date: bookingDetails.bookingDate,
+            Name: bookingDetails.name,
+            user_id: user_id,
+            car_model: bookingDetails.carModel,
+            plate_number: bookingDetails.plateNumber,
+            slot_id: bookingDetails.slotId // Ensure slot_id is included if available
+          };
+
+          console.log("Creating booking with data:", bookingData);
+      
+          // Make API call to store booking in the database
+          const response = await createBooking(bookingData);
+          console.log("API response:", response);
+      
+          if (response.success) {
+            alert("Booking confirmed!");
+            navigate('/my-bookings'); // Redirect to My Bookings page after confirmation
+          } else {
+            console.error("Failed to create booking. API response:", response);
+            alert("Failed to create booking. Please try again.");
+          }
+        }
       }
     } catch (error) {
       console.error("Error storing booking details:", error);
       alert("There was an error confirming the booking. Please try again.");
     }
   };
-  
 
   return (
     <div className="checkout-container" aria-label="Checkout page for booking confirmation">
@@ -83,14 +120,22 @@ const Checkout = () => {
         <p className="no-slot-message" aria-label="Message when no booking details found">No booking details found. Please go back to the dashboard to make a booking.</p>
       )}
 
-      <motion.button
-        className="renew-button"
-        whileTap={{ scale: 0.95 }}
-        onClick={handlePayment}
-        aria-label="Pay Now button for booking confirmation"
-      >
-        Pay Now
-      </motion.button>
+      {clientSecret && stripe ? (
+        <form onSubmit={handlePayment} className="payment-form">
+          <PaymentElement />
+          <motion.button
+            className="renew-button"
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            disabled={!stripe || !clientSecret}
+            aria-label="Pay Now button for booking confirmation"
+          >
+            Pay Now
+          </motion.button>
+        </form>
+      ) : (
+        <p>Loading payment details, please wait...</p>
+      )}
       <br />
 
       <NavLink to="/dashboard" className="back-link" aria-label="Link back to dashboard">
