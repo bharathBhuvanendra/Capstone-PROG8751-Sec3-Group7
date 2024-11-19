@@ -6,7 +6,7 @@ import '../styles/Checkout.css';
 import { createBooking } from '../models/bookingModel';  // Import the API call function
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 
-const Checkout = ({ clientSecret }) => {
+const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [bookingDetails, setBookingDetails] = useState(location.state?.slotDetails || null);
@@ -37,8 +37,8 @@ const Checkout = ({ clientSecret }) => {
 
     try {
       // Confirm the card payment
-      console.log("Confirming card payment with clientSecret:", clientSecret);
-
+      console.log("Confirming card payment...");
+      
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -120,14 +120,14 @@ const Checkout = ({ clientSecret }) => {
         <p className="no-slot-message" aria-label="Message when no booking details found">No booking details found. Please go back to the dashboard to make a booking.</p>
       )}
 
-      {clientSecret && stripe ? (
+      {stripe ? (
         <form onSubmit={handlePayment} className="payment-form">
           <PaymentElement />
           <motion.button
             className="renew-button"
             whileTap={{ scale: 0.95 }}
             type="submit"
-            disabled={!stripe || !clientSecret}
+            disabled={!stripe}
             aria-label="Pay Now button for booking confirmation"
           >
             Pay Now

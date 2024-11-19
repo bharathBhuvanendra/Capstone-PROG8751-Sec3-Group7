@@ -39,7 +39,7 @@ const PaymentWrapper = () => {
   return (
     clientSecret ? (
       <Elements stripe={stripePromise} options={{ clientSecret }}>
-        <Checkout clientSecret={clientSecret} />
+        <Checkout />
       </Elements>
     ) : (
       <p>Loading payment details, please wait...</p>
