@@ -1,25 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/AdminDashboard.css'; // Import the CSS file
+import '../styles/AdminDashboard.css';
+import { getBookings } from '../models/bookingModel'; // Import the function to fetch bookings
 
-const API_URL = 'http://localhost:5001/api/users';
+const USERS_API_URL = 'http://localhost:5001/api/users';
+const BOOKINGS_API_URL = 'http://localhost:5001/api/bookings';
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [bookings, setBookings] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [loadingBookings, setLoadingBookings] = useState(true);
   const [newUser, setNewUser] = useState({ firstName: '', lastName: '', email: '', password: '', role: '' });
 
   // Fetch users from the API
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(API_URL);
-      // Ensure users is set as an array
+      const response = await axios.get(USERS_API_URL);
       const usersData = Array.isArray(response.data) ? response.data : response.data.users || [];
       setUsers(usersData);
-      setLoading(false);
+      setLoadingUsers(false);
     } catch (error) {
       console.error('Error fetching users:', error);
-      setLoading(false);
+      setLoadingUsers(false);
+    }
+  };
+
+  // Fetch bookings from the API
+  const fetchBookings = async () => {
+    try {
+      const response = await getBookings(); // Fetch all bookings using the getBookings function
+      if (response.success) {
+        setBookings(response.bookings);
+      } else {
+        console.error('Error fetching bookings:', response.message);
+      }
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+    } finally {
+      setLoadingBookings(false);
     }
   };
 
@@ -27,7 +46,7 @@ const AdminDashboard = () => {
   const handleCreateUser = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/signup`, newUser);
+      await axios.post(`${USERS_API_URL}/signup`, newUser);
       fetchUsers(); // Refresh user list after creating a user
       setNewUser({ firstName: '', lastName: '', email: '', password: '', role: '' }); // Reset form
     } catch (error) {
@@ -36,9 +55,9 @@ const AdminDashboard = () => {
   };
 
   // Delete a user
-  const handleDelete = async (userId) => {
+  const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`${API_URL}/${userId}`);
+      await axios.delete(`${USERS_API_URL}/${userId}`);
       fetchUsers(); // Refresh user list after deletion
     } catch (error) {
       console.error('Error deleting user:', error);
@@ -47,13 +66,16 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchUsers();
+    fetchBookings(); // Fetch bookings when the component mounts
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loadingUsers || loadingBookings) return <p>Loading...</p>;
 
   return (
     <div className="admin-dashboard">
       <h1 aria-label="Admin Dashboard">Admin Dashboard</h1>
+      
+      {/* User Management Form */}
       <form onSubmit={handleCreateUser} aria-label="Create New User Form">
         <label htmlFor="firstName" aria-label="First Name">First Name</label>
         <input
@@ -110,6 +132,7 @@ const AdminDashboard = () => {
         <button type="submit" aria-label="Create User">Create User</button>
       </form>
 
+      {/* Users Table */}
       <table aria-label="User List">
         <thead>
           <tr>
@@ -129,11 +152,38 @@ const AdminDashboard = () => {
               <td>{user.role}</td>
               <td className="actions">
                 <button
-                  onClick={() => handleDelete(user._id)}
+                  onClick={() => handleDeleteUser(user._id)}
                   aria-label={`Delete ${user.firstName} ${user.lastName}`}
                 >
                   Delete
                 </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Bookings Table */}
+      <h2>Bookings</h2>
+      <table aria-label="Bookings List">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Car Model</th>
+            <th>Plate Number</th>
+            <th>Booking Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings.map(booking => (
+            <tr key={booking._id}>
+              <td>{booking.user_id?.firstName} {booking.user_id?.lastName}</td>
+              <td>{booking.car_model}</td>
+              <td>{booking.plate_number}</td>
+              <td>{new Date(booking.Date).toLocaleDateString()}</td>
+              <td className="actions">
+                {/* Add actions here if needed */}
               </td>
             </tr>
           ))}
