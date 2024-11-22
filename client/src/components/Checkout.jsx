@@ -5,6 +5,7 @@ import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import '../styles/Checkout.css';
 import { createBooking } from '../models/bookingModel';  // Import the API call function
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+import ShowReceiptButton from './ShowReceiptButton'; 
 
 const Checkout = () => {
   const location = useLocation();
@@ -12,6 +13,7 @@ const Checkout = () => {
   const [bookingDetails, setBookingDetails] = useState(location.state?.slotDetails || null);
   const stripe = useStripe();
   const elements = useElements();
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
     if (!bookingDetails) {
@@ -42,7 +44,7 @@ const Checkout = () => {
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/my-bookings`,  // Add return_url to redirect after payment
+          return_url: `${window.location.origin}/my-bookings`,  // Add return_url to redirect after payment (Not used here anymore)
         },
         redirect: 'if_required',
       });
@@ -50,42 +52,41 @@ const Checkout = () => {
       if (result.error) {
         console.error("Error processing payment: ", result.error.message);
         alert(result.error.message);
-      } else {
-        if (result.paymentIntent.status === 'succeeded') {
-          console.log('Payment successful! PaymentIntent:', result.paymentIntent);
-          alert('Payment successful!');
-          
-          // Retrieve user_id from sessionStorage (assuming user is logged in)
-          const user_id = sessionStorage.getItem('userId');
-          if (!user_id) {
-            alert('User not logged in. Please log in to continue.');
-            navigate('/login'); // Redirect to login page if user is not logged in
-            return;
-          }
-      
-          // Prepare booking data
-          const bookingData = {
-            Date: bookingDetails.bookingDate,
-            Name: bookingDetails.name,
-            user_id: user_id,
-            car_model: bookingDetails.carModel,
-            plate_number: bookingDetails.plateNumber,
-            slot_id: bookingDetails.slotId // Ensure slot_id is included if available
-          };
+      } else if (result.paymentIntent.status === 'succeeded') {
+        console.log('Payment successful! PaymentIntent:', result.paymentIntent);
+        alert('Payment successful!');
+        setPaymentSuccess(true);
+        
+        // Retrieve user_id from sessionStorage (assuming user is logged in)
+        const user_id = sessionStorage.getItem('userId');
+        if (!user_id) {
+          alert('User not logged in. Please log in to continue.');
+          navigate('/login'); // Redirect to login page if user is not logged in
+          return;
+        }
 
-          console.log("Creating booking with data:", bookingData);
+        // Prepare booking data
+        const bookingData = {
+          Date: bookingDetails.bookingDate,
+          Name: bookingDetails.name,
+          user_id: user_id,
+          car_model: bookingDetails.carModel,
+          plate_number: bookingDetails.plateNumber,
+          slot_id: bookingDetails.slotId // Ensure slot_id is included if available
+        };
+
+        console.log("Creating booking with data:", bookingData);
       
-          // Make API call to store booking in the database
-          const response = await createBooking(bookingData);
-          console.log("API response:", response);
+        // Make API call to store booking in the database
+        const response = await createBooking(bookingData);
+        console.log("API response:", response);
       
-          if (response.success) {
-            alert("Booking confirmed!");
-            navigate('/my-bookings'); // Redirect to My Bookings page after confirmation
-          } else {
-            console.error("Failed to create booking. API response:", response);
-            alert("Failed to create booking. Please try again.");
-          }
+        if (response.success) {
+          alert("Booking confirmed!");
+          
+        } else {
+          console.error("Failed to create booking. API response:", response);
+          alert("Failed to create booking. Please try again.");
         }
       }
     } catch (error) {
@@ -136,6 +137,9 @@ const Checkout = () => {
       ) : (
         <p>Loading payment details, please wait...</p>
       )}
+      
+      {paymentSuccess && <ShowReceiptButton />}
+
       <br />
 
       <NavLink to="/dashboard" className="back-link" aria-label="Link back to dashboard">
