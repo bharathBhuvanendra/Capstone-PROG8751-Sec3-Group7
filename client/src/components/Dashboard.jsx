@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { getUserById } from '../models/userModel';  // Import the function to fetch user by ID
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -19,7 +20,30 @@ const Dashboard = () => {
         carModel: '',
         plateNumber: '',
     });
+
     const navigate = useNavigate();
+
+    // Fetch user data from API
+    useEffect(() => {
+        const userId = sessionStorage.getItem('userId');  // Get the userId from session storage
+        if (userId) {
+            // Fetch user data based on userId
+            const fetchUserData = async () => {
+                const result = await getUserById(userId);
+                if (result.success) {
+                    // Pre-fill the name and other fields if necessary
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        name: result.user.firstName || '',  // Assuming 'firstName' is part of the user schema
+                    }));
+                } else {
+                    console.error('Failed to fetch user data:', result.message);
+                }
+            };
+
+            fetchUserData();
+        }
+    }, []);  // Empty dependency array ensures this runs only once after the component mounts
 
     const handleInputChange = (e) => {
         setFormData({
