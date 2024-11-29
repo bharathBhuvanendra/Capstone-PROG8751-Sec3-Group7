@@ -1,3 +1,5 @@
+// server/controllers/receiptController.js
+
 const generateParkingReceipt = require('../generateReceipt');
 const sendEmailWithReceipt = require('../generateEmail'); // Import email sending functionality
 const path = require('path');
@@ -7,11 +9,6 @@ exports.generateParkingReceipt = (req, res) => {
   const bookingDetails = req.body.bookingDetails;
   const userEmail = req.body.userEmail;
 
-  if (!userEmail) {
-    console.error('No recipient email provided');
-    return res.status(400).json({ message: 'No recipient email provided' });
-  }
-
   // Generate parking receipt
   generateParkingReceipt(outputFilePath, bookingDetails, async (err, pdfBuffer) => {
     if (err) {
@@ -19,12 +16,16 @@ exports.generateParkingReceipt = (req, res) => {
       return res.status(500).json({ message: 'Failed to generate receipt' });
     }
 
-    // Send email with the generated receipt
-    try {
-      await sendEmailWithReceipt(userEmail, bookingDetails);
-      console.log('Email sent successfully with the receipt.');
-    } catch (emailError) {
-      console.error('Failed to send email:', emailError);
+    // Send email with the generated receipt, if userEmail is available
+    if (userEmail) {
+      try {
+        await sendEmailWithReceipt(userEmail, bookingDetails);
+        console.log('Email sent successfully with the receipt.');
+      } catch (emailError) {
+        console.error('Failed to send email:', emailError);
+      }
+    } else {
+      console.warn('No recipient email provided, skipping email sending step.');
     }
 
     // Send the receipt file to the client
