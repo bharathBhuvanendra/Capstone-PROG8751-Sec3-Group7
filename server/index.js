@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
-
 // Load environment variables
 dotenv.config();
 
@@ -29,34 +28,19 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 const userRoutes = require('./routes/userRoutes');
 const parkingSlotRoutes = require('./routes/parkingslotRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
-const paymentRoutes = require('./routes/paymentRoutes'); // Import the payment routes
-// const paymentIntentRoutes = require('./routes/paymentIntentRoutes'); // Import paymentIntent routes
-const generateParkingReceipt = require('./generateReceipt');
+const paymentRoutes = require('./routes/paymentRoutes'); 
+const paymentdataRoutes = require('./routes/paymentdataRoutes');
+const receiptController = require('./controllers/receiptController');  // Make sure this import is correct
+
 // Use routes
 app.use('/api/users', userRoutes);
 app.use('/api/parking-slots', parkingSlotRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/payments', paymentRoutes);
-app.post('/api/generate-receipt', (req, res) => {
-  const outputFilePath = './receipts/parking_receipt.pdf';
+app.use('/api/payments/create-payment-intent', paymentRoutes);
+app.use('/api/payment-data', paymentdataRoutes);
 
-  // Call the function to generate the receipt
-  generateParkingReceipt(outputFilePath, (err) => {
-    if (err) {
-      console.error('Failed to generate receipt:', err);
-      return res.status(500).json({ message: 'Failed to generate receipt' });
-    }
-
-    // Read the file and send it as a response
-    res.sendFile(outputFilePath, { root: __dirname }, (err) => {
-      if (err) {
-        console.error('Error sending receipt:', err);
-        res.status(500).json({ message: 'Failed to send receipt' });
-      }
-    });
-  });
-});
-// app.use('/api/payment-intents', paymentIntentRoutes); // Use paymentIntent routes
+// Receipt generation route
+app.post('/api/generate-receipt', receiptController.generateParkingReceipt);
 
 // Debug route to verify server is running
 app.get('/api/debug', (req, res) => {

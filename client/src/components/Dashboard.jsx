@@ -20,6 +20,7 @@ const Dashboard = () => {
         plateNumber: '',
     });
     const navigate = useNavigate();
+    const ratePerHour = 10; // Define the rate per hour for parking
 
     const handleInputChange = (e) => {
         setFormData({
@@ -37,16 +38,24 @@ const Dashboard = () => {
             alert("Please fill out all fields!");
             return;
         }
+
+        // Calculate the total amount
+        const bookingDuration = parseInt(formData.bookingDuration, 10);
+        const amount = bookingDuration * ratePerHour;
+
+        // Create booking details object
         const bookingDetails = {
             slot: selectedLot.name,
-            slotId: selectedLot.id, // Make sure this ID is included
+            slotId: selectedLot.id, // Make sure this ID is included if available
             location: selectedLot.location,
             name: formData.name,
             bookingDate: formData.bookingDate,
-            bookingDuration: formData.bookingDuration,
+            bookingDuration: bookingDuration,
             carModel: formData.carModel,
-            plateNumber: formData.plateNumber
+            plateNumber: formData.plateNumber,
+            amount: amount, // Include the calculated amount here
         };
+
         sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
         navigate('/checkout', { state: { slotDetails: bookingDetails } });
     };

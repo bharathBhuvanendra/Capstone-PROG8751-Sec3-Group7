@@ -1,14 +1,16 @@
+// File: src/components/MyBookings.jsx
+
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/MyBookings.css';
 import '../styles/Global.css';
-import { getBookings } from '../models/bookingModel';  // Import the correct API call function
+import { getBookingsByUserId } from '../models/bookingModel';  // Use the correct function to get bookings by user_id
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const fetchBookings = async () => {
+    const fetchUserBookings = async () => {
       try {
         const user_id = sessionStorage.getItem('userId'); // Retrieve user_id from sessionStorage
         if (!user_id) {
@@ -16,7 +18,7 @@ const MyBookings = () => {
           return;
         }
 
-        const response = await getBookings();  // Make API call
+        const response = await getBookingsByUserId(user_id);  // Make API call to get bookings by user_id
         if (response.success) {
           setBookings(response.bookings);
         } else {
@@ -27,7 +29,7 @@ const MyBookings = () => {
       }
     };
 
-    fetchBookings();
+    fetchUserBookings();
   }, []);
 
   return (
@@ -43,7 +45,7 @@ const MyBookings = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
-              role="listitem" 
+              role="listitem"
               aria-labelledby={`booking-${index}`}
             >
               <div className="booking-details">
@@ -58,6 +60,9 @@ const MyBookings = () => {
                 </p>
                 <p id={`booking-${index}-plate-number`} aria-labelledby={`booking-${index}-plate-number`}>
                   <strong>Plate Number:</strong> {booking.plate_number}
+                </p>
+                <p id={`booking-${index}-duration`} aria-labelledby={`booking-${index}-duration`}>
+                  <strong>Booking Duration:</strong> {booking.bookingDuration} 
                 </p>
               </div>
             </motion.div>
