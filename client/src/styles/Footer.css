@@ -1,90 +1,258 @@
 .footer {
-    background-color: #2e2d31; /* Footer background color */
-    color: white; /* Text color */
-    padding: 40px; /* Padding for the footer */
+    background-color: #2e2d31;
+    color: white;
+    padding: 40px;
+    background-color: #033669;
+    color: white;
+    padding: 40px;
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center align items */
-    border-radius: 30px; /* Rounded corners */
-    margin-bottom: 75px; 
+    flex-direction: column;
+    align-items: center;
+    border-radius: 30px;
+    margin-bottom: 75px;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 30px;
+    margin-bottom: 75px;
     margin-left: 105px;
-    margin-right: 105px;/* Increased space at the bottom */
+    margin-right: 105px;
+    position: relative;
+    overflow: hidden;
+    font-family: Montserrat, serif;
 }
 
-.container {
-    display: flex;
-    justify-content: space-between; /* Space between left and right sections */
-    align-items: flex-start; /* Align items at the start */
-    max-width: 1500px; /* Increased maximum width */
-    width: 500%; /* Full width */
+.footer-background-image {
+    position: absolute; /* Position image within footer container */
+    bottom: 0; /* Align to the bottom */
+    left: 18%; /* Adjust to move image slightly to the left */
+    top: 220px; /* Set top position */
+    width: 200px; /* Adjust image width */
+    height: 200px; /* Adjust image height */
+    opacity: 0.7; /* Set opacity for background effect */
+    object-fit: cover; /* Ensure the image covers the area */
+    z-index: -1; /* Keep the image in the background */
+    transform: scale(7.9); /* Adjust scale for desired size */
+    background-position: bottom left; /* Position at bottom left */
+    background-repeat: no-repeat; /* Prevent image from repeating */
+    margin-right: 105px;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-background-image {
+    position: absolute; /* Position image within footer container */
+    bottom: 0; /* Align to the bottom */
+    left: 18%; /* Adjust to move image slightly to the left */
+    top: 220px; /* Set top position */
+    width: 200px; /* Adjust image width */
+    height: 200px; /* Adjust image height */
+    opacity: 0.7; /* Set opacity for background effect */
+    object-fit: cover; /* Ensure the image covers the area */
+    z-index: -1; /* Keep the image in the background */
+    transform: scale(7.9); /* Adjust scale for desired size */
+    background-position: bottom left; /* Position at bottom left */
+    background-repeat: no-repeat; /* Prevent image from repeating */
 }
 
 .footer h3 {
-    color: white; /* Set font color for the heading */
-    font-family: 'Poppins', sans-serif; /* Modern Google font */
-    font-size: 3rem; /* Increased font size */
-    margin: 0; /* Remove default margin */
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    margin: 0;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    margin: 0;
 }
 
 .footer p {
-    font-size: 1.25rem; /* Increase font size for text */
-    color: white; /* Set font color to white */
+    font-size: 1.25rem;
+    color: white;
+    font-size: 1.25rem;
+    color: white;
 }
+
+
 .font-poppins {
     font-family: 'Poppins', sans-serif;
-  }
-  
+}
+
+
+
 .no-bullets {
-    list-style-type: none; /* Remove bullets */
-    padding: 0; /* Remove padding */
+    list-style-type: none;
+    padding: 0;
+    list-style-type: none;
+    padding: 0;
 }
 
 .no-bullets li {
-    font-size: 1.5rem; /* Increase font size */
-    color: white; /* Set font color */
-    cursor: pointer; /* Cursor pointer on hover */
-    transition: color 0.3s ease; /* Smooth color transition */
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .no-bullets li:hover {
-    color: #FF00FF; /* Change color on hover */
+    color: #FF00FF;
+    color: #FF00FF;
 }
 
 .btn-primary {
-    padding: 15px 30px; /* Increase button size */
-    border-radius: 30px; /* Rounded button corners */
-    cursor: pointer; /* Pointer on hover */
-    font-size: 1.25rem; /* Increase font size */
-    color: white; /* Button text color */
-    background-color: #a09d94; /* Primary button color */
-    margin-top: 10px; /* Space above the button */
+    padding: 15px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: white;
+    background-color: #a09d94;
+    margin-top: 10px;
+    padding: 15px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: white;
+    background-color: #a09d94;
+    margin-top: 10px;
 }
 
 .btn-primary:hover {
-    opacity: 0.8; /* Button hover effect */
+    opacity: 0.8;
+    opacity: 0.8;
 }
 
 .footer img {
-    width: 80px; /* Increase parking symbol size */
-    height: 80px; /* Set height for parking symbol */
-    margin-left: 10px; /* Space between text and image */
+    width: 80px;
+    height: 80px;
+    margin-left: 10px;
+    width: 80px;
+    height: 80px;
+    margin-left: 10px;
 }
 
 .social-icon {
-    margin: 0 10px; /* Space between social icons */
-    padding: 10px; /* Padding for social icons */
-    background-color: white; /* Background color for icons */
-    border-radius: 50%; /* Rounded icons */
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+    margin: 0 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 50%;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 50%;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .social-icon:hover {
-    background-color: currentColor; /* Change background to the icon color on hover */
-    color: white; /* Change text color to white on hover */
+    background-color: currentColor;
+    color: white;
+    background-color: currentColor;
+    color: white;
 }
 
 .footer-note {
-    font-size: 1.25rem; /* Increase font size for footer note */
-    text-align: center; /* Center align footer note */
-    margin-top: 20px; /* Space above footer note */
+    font-size: 1.25rem;
+    text-align: center;
+    margin-top: 20px;
 }
+
+/* Added to properly center the center-bottom section */
+.footer .center-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+    margin-top: 30px; /* Added space between other sections and center-bottom */
+}
+
+.footer .social-icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.footer .social-icons a {
+    margin: 0 10px; /* Spacing between social icons */
+    font-size: 1.25rem;
+    text-align: center;
+    margin-top: 20px;
+}
+
+li a { 
+    color: white;
+}
+/* Added to properly center the center-bottom section */
+.footer .center-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+    margin-top: 30px; /* Added space between other sections and center-bottom */
+}
+
+.footer .social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.footer .social-icons a {
+    margin: 10px 10px; /* Spacing between social icons */
+}
+
+@media (max-width: 768px) { /* Adjust the max-width as needed for your mobile breakpoint */
+    .footer {
+      margin: 1rem;
+    }
+
+    h3, p, button, li{
+        text-align: center;
+    }
+
+    .items-end{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1920px) {
+    h3, p, button, li{
+        text-align: center;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .items-end{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+  }
+
+  @media (min-width: 1921px)
+  {
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        max-width: 1500px;
+        width: 100%; /* Changed from 500% to 100% */
+        flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+        align-items: flex-start;
+    }
+  }

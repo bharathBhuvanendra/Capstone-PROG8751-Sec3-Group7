@@ -1,27 +1,33 @@
+// App.js
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import Homepage from './components/Homepage';
+import Dashboard from './components/Dashboard';
+
 import Navbar from './components/Navbar';
-import Home from './components/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import MyBookings from './components/MyBookings';
-import Footer from './components/Footer';  // Import Footer
+import Footer from './components/Footer';
+import Checkout from './components/Checkout';
+import AdminDashboard from './components/AdminDashboard';
 
 function App() {
-  
   return (
     <Router>
-      
-      <div className="App">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-        </Routes>
-        <Footer />  
-      </div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+      </Routes>
+      <Footer />
     </Router>
   );
 }

@@ -1,55 +1,31 @@
+const mongoose = require('mongoose'); // Add missing mongoose import
 const ParkingSlot = require('../models/ParkingSlots');
 
-// Create a new parking slot
-exports.createParkingSlot = async (req, res) => {
-  try {
-    const newSlot = new ParkingSlot(req.body);
-    const slot = await newSlot.save();
-    res.status(201).json(slot);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Get all parking slots
+// Get all parking lots
 exports.getParkingSlots = async (req, res) => {
-  try {
-    const slots = await ParkingSlot.find();
-    res.json(slots);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+    try {
+        console.log('Attempting to fetch parking slots from database...');
+        // Check if there are any parking lots in the database
+        let existingParkingSlots = await ParkingSlot.find();
+        console.log('Existing parking slots:', existingParkingSlots);
 
-// Get a parking slot by ID
-exports.getParkingSlotById = async (req, res) => {
-  try {
-    const slot = await ParkingSlot.findById(req.params.id);
-    if (!slot) return res.status(404).json({ message: 'Slot not found' });
-    res.json(slot);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+        if (existingParkingSlots.length === 0) {
+            // Seed initial parking lot data if none exist
+            console.log('No parking slots found, seeding initial data...');
+            const parkingLots = [
+                { name: 'Lot A', location: 'Downtown', availableLots: 20 },
+                { name: 'Lot B', location: 'Uptown', availableLots: 15 },
+                { name: 'Lot C', location: 'Suburb', availableLots: 25 },
+            ];
+            existingParkingSlots = await ParkingSlot.insertMany(parkingLots);
+            console.log('Initial parking lot data has been seeded:', existingParkingSlots);
+        } else {
+            console.log('Parking lot data already exists:', existingParkingSlots);
+        }
 
-// Update a parking slot by ID
-exports.updateParkingSlot = async (req, res) => {
-  try {
-    const slot = await ParkingSlot.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!slot) return res.status(404).json({ message: 'Slot not found' });
-    res.json(slot);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Delete a parking slot by ID
-exports.deleteParkingSlot = async (req, res) => {
-  try {
-    const slot = await ParkingSlot.findByIdAndDelete(req.params.id);
-    if (!slot) return res.status(404).json({ message: 'Slot not found' });
-    res.json({ message: 'Parking Slot deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+        res.status(200).json(existingParkingSlots);
+    } catch (error) {
+        console.error('Error fetching or seeding parking slots:', error);
+        res.status(500).json({ message: 'Error fetching parking slots', error });
+    }
 };
