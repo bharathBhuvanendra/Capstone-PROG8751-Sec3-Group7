@@ -49,3 +49,26 @@ export const loginUser = async (userData) => {
     return { success: false, message: 'An error occurred while logging in' };
   }
 };
+
+// Function to get user details by user ID
+export const getUserById = async (userId) => {
+  try {
+    const response = await fetch(`${API_URL}/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { success: false, message: data.message || 'Failed to fetch user details' };
+    }
+
+    return { success: true, user: data.user };  // Return the user details
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    return { success: false, message: 'An error occurred while fetching user details' };
+  }
+};

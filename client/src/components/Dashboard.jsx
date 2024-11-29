@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { getUserById } from '../models/userModel';  // Import the function to fetch user by ID
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
     const parkingLots = [
         { name: 'Lot A', location: 'Downtown', availableLots: 20 },
-        { name: 'Lot B', location: 'Uptown', availableLots: 15 },
+        { name: 'Lot B', location: 'Airport', availableLots: 15 },
         { name: 'Lot C', location: 'Suburb', availableLots: 25 },
-        { name: 'Lot D', location: 'City Center', availableLots: 10 },
+        { name: 'Lot D', location: 'Mall', availableLots: 10 },
     ];
 
     const [selectedLot, setSelectedLot] = useState(null);
@@ -19,7 +20,31 @@ const Dashboard = () => {
         carModel: '',
         plateNumber: '',
     });
+
     const navigate = useNavigate();
+    const ratePerHour = 10; // Define the rate per hour for parking
+
+    // Fetch user data from API
+    useEffect(() => {
+        const userId = sessionStorage.getItem('userId');  // Get the userId from session storage
+        if (userId) {
+            // Fetch user data based on userId
+            const fetchUserData = async () => {
+                const result = await getUserById(userId);
+                if (result.success) {
+                    // Pre-fill the name and other fields if necessary
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        name: result.user.firstName || '',  // Assuming 'firstName' is part of the user schema
+                    }));
+                } else {
+                    console.error('Failed to fetch user data:', result.message);
+                }
+            };
+
+            fetchUserData();
+        }
+    }, []);  // Empty dependency array ensures this runs only once after the component mounts
 
     const handleInputChange = (e) => {
         setFormData({
@@ -37,16 +62,24 @@ const Dashboard = () => {
             alert("Please fill out all fields!");
             return;
         }
+
+        // Calculate the total amount
+        const bookingDuration = parseInt(formData.bookingDuration, 10);
+        const amount = bookingDuration * ratePerHour;
+
+        // Create booking details object
         const bookingDetails = {
             slot: selectedLot.name,
-            slotId: selectedLot.id, // Make sure this ID is included
+            slotId: selectedLot.id, // Make sure this ID is included if available
             location: selectedLot.location,
             name: formData.name,
             bookingDate: formData.bookingDate,
-            bookingDuration: formData.bookingDuration,
+            bookingDuration: bookingDuration,
             carModel: formData.carModel,
-            plateNumber: formData.plateNumber
+            plateNumber: formData.plateNumber,
+            amount: amount, // Include the calculated amount here
         };
+
         sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
         navigate('/checkout', { state: { slotDetails: bookingDetails } });
     };

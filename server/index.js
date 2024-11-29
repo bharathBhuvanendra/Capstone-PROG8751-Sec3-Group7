@@ -1,8 +1,9 @@
+// server/index.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const path = require('path');
 
 // Load environment variables
 dotenv.config();
@@ -11,14 +12,15 @@ dotenv.config();
 const app = express();
 app.use(express.json());  // For parsing JSON requests
 
+// Configure CORS
 app.use(cors({
-  origin: 'http://localhost:5000',  // Allow requests from this origin
+  origin: 'http://localhost:3000',  // Allow requests from this origin
   methods: 'GET,POST,PUT,DELETE',   // Allowed HTTP methods
   allowedHeaders: 'Content-Type,Authorization'  // Allowed headers
 }));
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected!'))
   .catch(err => console.log(err));
 
@@ -26,14 +28,19 @@ mongoose.connect(process.env.MONGO_URI)
 const userRoutes = require('./routes/userRoutes');
 const parkingSlotRoutes = require('./routes/parkingslotRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
-
-// Middleware to parse JSON
-app.use(express.json());
+const paymentRoutes = require('./routes/paymentRoutes'); 
+const paymentdataRoutes = require('./routes/paymentdataRoutes');
+const receiptController = require('./controllers/receiptController');  // Make sure this import is correct
 
 // Use routes
 app.use('/api/users', userRoutes);
 app.use('/api/parking-slots', parkingSlotRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/payments/create-payment-intent', paymentRoutes);
+app.use('/api/payment-data', paymentdataRoutes);
+
+// Receipt generation route
+app.post('/api/generate-receipt', receiptController.generateParkingReceipt);
 
 // Debug route to verify server is running
 app.get('/api/debug', (req, res) => {
