@@ -1,12 +1,13 @@
-// server/generateReceipt.js
-
 const PDFDocument = require('pdfkit');
 const bwipjs = require('bwip-js');
 const fs = require('fs');
 const path = require('path');
 
 function generateParkingReceipt(filePath, bookingDetails, callback) {
-  console.log('Booking Details: ', bookingDetails.carModel)
+  if (typeof callback !== 'function') {
+    throw new Error('Expected callback to be a function');
+  }
+
   const doc = new PDFDocument({
     size: [300, 600], // Set receipt size
     margins: { top: 20, bottom: 20, left: 20, right: 20 },
@@ -18,19 +19,21 @@ function generateParkingReceipt(filePath, bookingDetails, callback) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Pipe to a file
+  // Pipe to a file for saving
   const writeStream = fs.createWriteStream(filePath);
   doc.pipe(writeStream);
 
-  // Define the path to the icon
-  const imagePath = path.resolve(__dirname, 'assets', 'Logo.png'); // Create absolute path to image
-
-  // Get current date and time
-  const now = new Date();
-  const currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  const currentDate = now.toLocaleDateString();
+  // Use a memory buffer for email
+  const buffers = [];
+  doc.on('data', (chunk) => buffers.push(chunk));
+  doc.on('end', () => {
+    const pdfBuffer = Buffer.concat(buffers);
+    callback(null, pdfBuffer); // Ensure callback is called only once
+  });
 
   // Header Icon and Text
+  const imagePath = path.resolve(__dirname, 'assets', 'Logo.png'); // Create absolute path to image
+
   if (fs.existsSync(imagePath)) {
     try {
       doc.image(imagePath, { width: 60, align: 'center', valign: 'top' });
@@ -38,9 +41,10 @@ function generateParkingReceipt(filePath, bookingDetails, callback) {
       console.error('Error loading image: ', err);
     }
   } else {
-    console.warn("Image not found, skipping...");
+    console.warn('Image not found, skipping...');
   }
 
+  // Content of the PDF
   doc.moveDown(0.5);
   doc.fontSize(18).font('Helvetica-Bold').text('PARK-A-Lot', { align: 'center' });
   doc.fontSize(12).font('Helvetica').text('Kitchener, ON', { align: 'center' });
@@ -57,6 +61,10 @@ function generateParkingReceipt(filePath, bookingDetails, callback) {
   doc.moveTo(20, doc.y + 5).lineTo(280, doc.y + 5).dash(2, { space: 2 }).stroke();
 
   // Time Information (Large Bold)
+  const now = new Date();
+  const currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const currentDate = now.toLocaleDateString();
+
   doc.moveDown(2);
   doc.fontSize(28).font('Helvetica-Bold').text(currentTime, { align: 'center' });
 
@@ -84,11 +92,11 @@ function generateParkingReceipt(filePath, bookingDetails, callback) {
   // Generate Barcode
   bwipjs.toBuffer(
     {
-      bcid: 'code128', // Barcode type
-      text: bookingDetails.plateNumber || '123456789012', // Text to encode (fallback if missing)
-      scale: 3, // 3x scaling factor
-      height: 10, // Bar height, in millimeters
-      includetext: false, // Do not include the text
+      bcid: 'code128',
+      text: bookingDetails.plateNumber || '123456789012',
+      scale: 3,
+      height: 10,
+      includetext: false,
     },
     (err, png) => {
       if (err) {
@@ -96,23 +104,20 @@ function generateParkingReceipt(filePath, bookingDetails, callback) {
         callback(err);
       } else {
         // Draw barcode onto the PDF
-        const barcodeWidth = 200; // Define the barcode width
-        const pageWidth = doc.page.width; // Get the page width
-        const xPosition = (pageWidth - barcodeWidth) / 2; // Calculate the x position to center the barcode
+        const barcodeWidth = 200;
+        const pageWidth = doc.page.width;
+        const xPosition = (pageWidth - barcodeWidth) / 2;
 
-        const barcodeImagePath = 'barcode.png';
-        fs.writeFileSync(barcodeImagePath, png);
-        doc.image(barcodeImagePath, xPosition, doc.y + 10, { width: barcodeWidth }); // Explicitly set the x position to center
-        fs.unlinkSync(barcodeImagePath); // Clean up barcode image file
-
-        // Finalize the PDF
-        doc.end();
-        writeStream.on('finish', () => {
-          callback(null); // Invoke callback when PDF generation is complete
-        });
+        doc.image(png, xPosition, doc.y + 10, { width: barcodeWidth });
+        doc.end(); // Finalize the PDF
       }
     }
   );
+
+  // Ensure the write stream is finalized
+  writeStream.on('finish', () => {
+    console.log(`PDF successfully saved to ${filePath}`);
+  });
 }
 
 module.exports = generateParkingReceipt;
