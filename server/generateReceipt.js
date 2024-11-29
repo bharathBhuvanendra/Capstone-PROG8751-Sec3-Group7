@@ -5,7 +5,8 @@ const bwipjs = require('bwip-js');
 const fs = require('fs');
 const path = require('path');
 
-function generateParkingReceipt(filePath, callback) {
+function generateParkingReceipt(filePath, bookingDetails, callback) {
+  console.log('Booking Details: ', bookingDetails.carModel)
   const doc = new PDFDocument({
     size: [300, 600], // Set receipt size
     margins: { top: 20, bottom: 20, left: 20, right: 20 },
@@ -62,11 +63,16 @@ function generateParkingReceipt(filePath, callback) {
   // Date and Space Info
   doc.moveDown(0.5);
   doc.fontSize(12).font('Helvetica').text(currentDate, { align: 'center' });
-  doc.fontSize(12).font('Helvetica').text('Space: 34', { align: 'center' });
+  doc.fontSize(12).font('Helvetica').text(`Slot: ${bookingDetails.slot || 'N/A'}`, { align: 'center' });
+
+  // Booking Duration and Car Info
+  doc.moveDown(0.5);
+  doc.fontSize(12).font('Helvetica').text(`Booking Duration: ${bookingDetails.bookingDuration || 0} hours`, { align: 'center' });
+  doc.fontSize(12).font('Helvetica').text(`Plate Number: ${bookingDetails.plateNumber || 'N/A'}`, { align: 'center' });
 
   // Payment Info (Large Bold)
   doc.moveDown(2);
-  doc.fontSize(24).font('Helvetica-Bold').text('Paid: $10.00', { align: 'center' });
+  doc.fontSize(24).font('Helvetica-Bold').text(`Paid: $${(bookingDetails.amount || 0).toFixed(2)}`, { align: 'center' });
 
   // Separator Line
   doc.moveTo(20, doc.y + 10).lineTo(280, doc.y + 10).dash(2, { space: 2 }).stroke();
@@ -79,7 +85,7 @@ function generateParkingReceipt(filePath, callback) {
   bwipjs.toBuffer(
     {
       bcid: 'code128', // Barcode type
-      text: '123456789012', // Text to encode
+      text: bookingDetails.plateNumber || '123456789012', // Text to encode (fallback if missing)
       scale: 3, // 3x scaling factor
       height: 10, // Bar height, in millimeters
       includetext: false, // Do not include the text

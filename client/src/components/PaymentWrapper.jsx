@@ -8,16 +8,16 @@ const stripePromise = loadStripe('pk_test_51QBC95I0HQU15HJgRKsfhJW9ojohpFPhbalJH
 
 const PaymentWrapper = () => {
   const [clientSecret, setClientSecret] = useState(null);
+  const [amount, setAmount] = useState(1000); // Default to $10 for 1 hour
 
-  // Fetch the clientSecret only once when the component mounts   
-  const fetchPaymentIntent = async () => {
+  const fetchPaymentIntent = async (amount) => {
     try {
       const response = await fetch('http://localhost:5001/api/payments/create-payment-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount: 1000, currency: 'cad' }), // Specify the amount and currency
+        body: JSON.stringify({ amount: amount, currency: 'cad' }), // Specify the amount and currency
       });
 
       if (!response.ok) {
@@ -32,14 +32,13 @@ const PaymentWrapper = () => {
   };
 
   useEffect(() => {
-    fetchPaymentIntent();
-  }, []); // Ensure this only runs once when the component mounts
+    fetchPaymentIntent(amount);
+  }, [amount]);
 
-  // Only render Elements after clientSecret is fetched
   return (
     clientSecret ? (
       <Elements stripe={stripePromise} options={{ clientSecret }}>
-        <Checkout />
+        <Checkout onAmountCalculated={setAmount} />
       </Elements>
     ) : (
       <p>Loading payment details, please wait...</p>
