@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import '../styles/Checkout.css';
 import { createBooking } from '../models/bookingModel';
-import { createPayment } from '../models/paymentModel'; // Import the API call function for payment
+// import { createPayment } from '../models/paymentModel'; // Import the API call function for payment
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import ShowReceiptButton from './ShowReceiptButton';
 import { createPaymentData } from '../models/paymentdataModel';

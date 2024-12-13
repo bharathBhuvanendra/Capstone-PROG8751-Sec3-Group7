@@ -32,18 +32,16 @@ module.exports = {
           },
         },
       };
-      
 
       // Customize output file naming for better identification
       webpackConfig.output = {
         ...webpackConfig.output,
         filename: 'static/js/[name].[contenthash:8].js',
-        chunkFilename: 'static/js/[name].[contenthash:8].chunk.js', // No custom prefix
+        chunkFilename: 'static/js/[name].[contenthash:8].chunk.js',
       };
-      
 
-      // Add BundleAnalyzerPlugin only for production builds
-      if (env === 'production' || env === 'local') {
+      // Add BundleAnalyzerPlugin only if ANALYZE environment variable is set
+      if (env === 'local') {
         webpackConfig.plugins.push(new BundleAnalyzerPlugin());
       }
 

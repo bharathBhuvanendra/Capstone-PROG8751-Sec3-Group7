@@ -4,7 +4,7 @@ import '../styles/AdminDashboard.css';
 import { getBookings } from '../models/bookingModel'; // Import the function to fetch bookings
 
 const USERS_API_URL = 'http://localhost:5001/api/users';
-const BOOKINGS_API_URL = 'http://localhost:5001/api/bookings';
+// const BOOKINGS_API_URL = 'http://localhost:5001/api/bookings';
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);

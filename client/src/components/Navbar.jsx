@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
