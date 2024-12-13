@@ -41,7 +41,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// User login controller
+// User login controller (server/controllers/userController.js)
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -66,14 +66,23 @@ exports.loginUser = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    console.log("role: ", user.role)
+    console.log("role: ", user.role);
 
-    return res.status(200).json({ success: true, message: 'Login successful', role: user.role, token, userId: user._id });
+    // Add userEmail in the response
+    return res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      role: user.role,
+      token,
+      userId: user._id,
+      userEmail: user.email, // Include the userEmail here
+    });
   } catch (error) {
     console.error('Error during login:', error);
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
 
 // Get all users
 exports.getUsers = async (req, res) => {

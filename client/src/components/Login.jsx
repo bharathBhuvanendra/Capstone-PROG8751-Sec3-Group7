@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import '../styles/Global.css';
-import { loginUser } from '../models/userModel';  // Import the API call function
+import { loginUser } from '../models/userModel';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -18,36 +18,46 @@ const Login = () => {
     });
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Assuming loginUser function in client/userModel.js handles the API request
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!/^[\w-.]+@([\w-]+\.)+com$/.test(formData.email)) {
-      setError('Please enter a valid email address');
-      return;
-    }
+  if (!/^[\w-.]+@([\w-]+\.)+com$/.test(formData.email)) {
+    setError('Please enter a valid email address');
+    return;
+  }
 
-    try {
-      const response = await loginUser(formData);  // Make API call
-      console.log('response data:', response);
+  try {
+    const response = await loginUser(formData);  // Make API call
+    console.log('Login response:', response); // Log the entire response to see what it contains
 
-      if (response.success) {
-        localStorage.setItem('token', response.token); // Store the token
-        sessionStorage.setItem('userId', response.userId);
-        alert('Login successful!');
-        if (response.role === 'admin') {
-          navigate('/admindashboard');
-        } else {
-          navigate('/dashboard');  // Redirect to dashboard after successful login
-        }
+    if (response.success) {
+      localStorage.setItem('token', response.token); // Store the token
+      sessionStorage.setItem('userId', response.userId); // Store user ID
+
+      // Verify if userEmail is present in the response
+      if (response.userEmail) {
+        console.log("Storing userEmail:", response.userEmail);
+        sessionStorage.setItem('userEmail', response.userEmail); // Store user email
       } else {
-        setError(response.message || 'Failed to log in');
+        console.error("userEmail not found in response.");
       }
-    } catch (error) {
-      console.error('Error during login:', error);
-      setError('An error occurred while logging in');
+
+      alert('Login successful!');
+      if (response.role === 'admin') {
+        navigate('/admindashboard');
+      } else {
+        navigate('/dashboard');
+      }
+    } else {
+      setError(response.message || 'Failed to log in');
     }
-  };
+  } catch (error) {
+    console.error('Error during login:', error);
+    setError('An error occurred while logging in');
+  }
+};
+
 
   return (
     <div className="login-container">
@@ -60,7 +70,7 @@ const Login = () => {
       >
         <h2 id="login-title" className="login-title">Sign into your account</h2>
 
-        {error && <p className="error-text" role="alert" aria-live="assertive">{error}</p>}  {/* Display error messages */}
+        {error && <p className="error-text" role="alert" aria-live="assertive">{error}</p>}
 
         <form className="space-y-8" onSubmit={handleSubmit} aria-labelledby="login-form-title">
           <h3 id="login-form-title" className="sr-only">Login form for existing users</h3>
