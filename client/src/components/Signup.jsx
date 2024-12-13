@@ -1,24 +1,28 @@
+// src/components/Signup.jsx
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import '../styles/Signup.css';
 import '../styles/Global.css';
-import { createUser } from '../models/userModel';  // Import the API function
+import { createUser } from '../models/userModel';
 
 const Signup = () => {
-  // State to manage form inputs
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    // username: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
 
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
 
-  // Handle input change
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -26,49 +30,73 @@ const Signup = () => {
     });
   };
 
-  // Handle form submission
+  const validateForm = () => {
+    const newErrors = {};
+    const { firstName, lastName, email, password, confirmPassword } = formData;
+
+    if (!/^[A-Za-z]+$/.test(firstName)) {
+      newErrors.firstName = 'First name should contain only alphabets';
+    }
+
+    if (!/^[A-Za-z]+$/.test(lastName)) {
+      newErrors.lastName = 'Last name should contain only alphabets';
+    }
+
+    if (!/^[\w-.]+@([\w-]+\.)+com$/.test(email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (password.length < 8) {
+      newErrors.password = 'Password should be at least 8 characters long';
+    }
+
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match!';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match!');
+    if (!validateForm()) {
       return;
     }
 
-    // Call createUser API
     try {
       const response = await createUser({
         firstName: formData.firstName,
         lastName: formData.lastName,
-        // username: formData.username,
         email: formData.email,
         password: formData.password,
       });
 
       if (response.success) {
         alert('User created successfully!');
-        // Optionally, redirect to login page
       } else {
-        setError(response.message || 'Failed to create user');
+        setErrors({ form: response.message || 'Failed to create user' });
       }
     } catch (error) {
-      setError('An error occurred while creating the user');
+      setErrors({ form: 'An error occurred while creating the user' });
     }
   };
 
   return (
-    <div className="signup-container">
+    <div className="signup-container" aria-label="Signup form container">
       <motion.div 
         className="signup-card"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        aria-label="Signup form card"
       >
         <h2 className="signup-title">Create an Account</h2>
 
-        {error && <p className="error-text">{error}</p>}  {/* Display error messages */}
+        {errors.form && <p className="error-text" aria-live="assertive">{errors.form}</p>}
 
-        <form className="space-y-8" onSubmit={handleSubmit}>
+        <form className="space-y-8" onSubmit={handleSubmit} aria-label="Signup form">
           <div className="input-container">
             <label className="input-label" htmlFor="firstName">
               First Name
@@ -81,7 +109,9 @@ const Signup = () => {
               value={formData.firstName}
               onChange={handleInputChange}
               required
+              aria-label="Enter your first name"
             />
+            {errors.firstName && <p className="error-text" aria-live="assertive">{errors.firstName}</p>}
           </div>
 
           <div className="input-container">
@@ -96,23 +126,10 @@ const Signup = () => {
               value={formData.lastName}
               onChange={handleInputChange}
               required
+              aria-label="Enter your last name"
             />
+            {errors.lastName && <p className="error-text" aria-live="assertive">{errors.lastName}</p>}
           </div>
-
-          {/* <div className="input-container">
-            <label className="input-label" htmlFor="username">
-              Username
-            </label>
-            <input 
-              className="input-field"
-              id="username"
-              type="text"
-              placeholder="Enter your username"
-              value={formData.username}
-              onChange={handleInputChange}
-              required
-            />
-          </div> */}
 
           <div className="input-container">
             <label className="input-label" htmlFor="email">
@@ -126,7 +143,9 @@ const Signup = () => {
               value={formData.email}
               onChange={handleInputChange}
               required
+              aria-label="Enter your email"
             />
+            {errors.email && <p className="error-text" aria-live="assertive">{errors.email}</p>}
           </div>
 
           <div className="input-container">
@@ -141,7 +160,9 @@ const Signup = () => {
               value={formData.password}
               onChange={handleInputChange}
               required
+              aria-label="Enter your password"
             />
+            {errors.password && <p className="error-text" aria-live="assertive">{errors.password}</p>}
           </div>
 
           <div className="input-container">
@@ -156,7 +177,9 @@ const Signup = () => {
               value={formData.confirmPassword}
               onChange={handleInputChange}
               required
+              aria-label="Confirm your password"
             />
+            {errors.confirmPassword && <p className="error-text" aria-live="assertive">{errors.confirmPassword}</p>}
           </div>
 
           <div className="flex items-center justify-between">
@@ -164,6 +187,7 @@ const Signup = () => {
               className="signup-button"
               whileHover={{ scale: 1.05 }}
               type="submit"
+              aria-label="Submit form to create account"
             >
               Sign Up
             </motion.button>
@@ -172,7 +196,7 @@ const Signup = () => {
 
         <p className="mt-6 text-center">
           Already have an account? 
-          <Link to="/login" className="login-link">Log In</Link>
+          <Link to="/login" className="login-link" aria-label="Navigate to login page">Log In</Link>
         </p>
       </motion.div>
     </div>

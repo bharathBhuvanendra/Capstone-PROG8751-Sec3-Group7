@@ -1,9 +1,18 @@
 const mongoose = require('mongoose');
 
 const ParkingSlotSchema = new mongoose.Schema({
-  slot_number: { type: String, required: true, unique: true },
-  is_available: { type: Boolean, default: true },
-  location: { type: String, required: true }
+    name: {
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    availableLots: {
+        type: Number,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('ParkingSlot', ParkingSlotSchema);

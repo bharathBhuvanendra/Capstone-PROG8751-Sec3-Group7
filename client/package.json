@@ -4,25 +4,32 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
+    "@stripe/react-stripe-js": "^2.9.0",
+    "@stripe/stripe-js": "^4.10.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "craco": "^0.0.3",
     "debug": "^4.3.7",
     "detect-port-alt": "^1.1.6",
     "framer-motion": "^11.11.7",
+    "pdfkit": "^0.15.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-error-boundary": "^4.1.2",
     "react-icons": "^5.3.0",
     "react-router-dom": "^6.26.2",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "react-scripts": "^5.0.1",
+    "web-vitals": "^2.1.4",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "build:netlify": "CI=false npm run build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "react-app-rewired": "^2.2.1",
     "tailwindcss": "^3.4.13"
   }
 }
