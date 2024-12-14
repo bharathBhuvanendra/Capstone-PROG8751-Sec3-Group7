@@ -43,6 +43,14 @@ const corsOptions = {
 // Apply CORS middleware
 app.use(cors(corsOptions));
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://park-a-lot-capstone.netlify.app');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  next();
+});
+
+
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected!'))
