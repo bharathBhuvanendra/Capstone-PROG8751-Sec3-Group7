@@ -10,7 +10,7 @@ dotenv.config();
 
 // Create Express app
 const app = express();
-app.use(express.json());  // For parsing JSON requests
+
 
 // // Configure CORS
 // app.use(cors({
@@ -37,19 +37,23 @@ const corsOptions = {
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
   credentials: true, // Allow cookies if needed
 };
 
 // Apply CORS middleware
 app.use(cors(corsOptions));
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://park-a-lot-capstone.netlify.app');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  next();
-});
+// Handle preflight requests for all routes
+app.options('*', cors(corsOptions));
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', 'https://park-a-lot-capstone.netlify.app');
+//   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+//   next();
+// });
 
+app.use(express.json());  // For parsing JSON requests
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
