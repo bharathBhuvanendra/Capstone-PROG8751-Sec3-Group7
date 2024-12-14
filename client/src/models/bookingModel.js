@@ -1,6 +1,6 @@
 // File: client/bookingModel.js
 
-const API_URL = 'http://localhost:5001/api/bookings';
+const API_URL = process.env.REACT_APP_BACKEND_URL ? `${process.env.REACT_APP_BACKEND_URL}/api/bookings` : 'http://localhost:5001/api/bookings';
 
 // Function to create a new booking
 export const createBooking = async (bookingData) => {

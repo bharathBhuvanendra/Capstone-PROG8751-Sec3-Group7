@@ -1,6 +1,6 @@
 
 
-const API_URL = 'http://localhost:5001/api/users';  // Replace with your actual API URL
+const API_URL = process.env.REACT_APP_BACKEND_URL ? `${process.env.REACT_APP_BACKEND_URL}/api/users` :  'http://localhost:5001/api/users';  
 
 // Function to create a new user
 export const createUser = async (userData) => {

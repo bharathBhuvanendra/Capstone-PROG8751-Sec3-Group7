@@ -1,6 +1,6 @@
 
 
-const API_URL = 'http://localhost:5001/api/generate-receipt';  // Replace with your actual API URL
+const API_URL = process.env.REACT_APP_BACKEND_URL ? `${process.env.REACT_APP_BACKEND_URL}/api/generate-receipt` : 'http://localhost:5001/api/generate-receipt';  
 
 // Function to create a new booking
 export const createBooking = async (bookingData) => {

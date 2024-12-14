@@ -6,7 +6,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // Allow CORS
 const cors = require('cors');
 const corsOptions = {
-  origin: 'http://localhost:5001', // Replace with your frontend origin
+  origin: ['http://localhost:5001', 'https://park-a-lot-capstone.netlify.app/'] // Replace with your frontend origin
 };
 
 exports.createPaymentIntent = [cors(corsOptions), async (req, res) => {
