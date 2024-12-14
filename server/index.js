@@ -12,14 +12,36 @@ dotenv.config();
 const app = express();
 app.use(express.json());  // For parsing JSON requests
 
-// Configure CORS
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://park-a-lot-capstone.netlify.app/'],  // Allow requests from this origin
-  methods: 'GET,POST,PUT,DELETE',   // Allowed HTTP methods
-  credentials: true, // Allow cookies if needed
-  allowedHeaders: 'Content-Type,Authorization'  // Allowed headers
+// // Configure CORS
+// app.use(cors({
+//   origin: ['http://localhost:3000', 'https://park-a-lot-capstone.netlify.app/'],  // Allow requests from this origin
+//   methods: 'GET,POST,PUT,DELETE',   // Allowed HTTP methods
+//   credentials: true, // Allow cookies if needed
+//   allowedHeaders: 'Content-Type,Authorization'  // Allowed headers
   
-}));
+// }));
+
+// Allow requests from multiple origins
+const allowedOrigins = [
+  'http://localhost:3000', // Local development
+  'https://dev-local--park-a-lot-capstone.netlify.app/', // Netlify preview
+  'https://park-a-lot-capstone.netlify.app', // Netlify deployment
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true); // Allow the origin
+    } else {
+      callback(new Error('Not allowed by CORS')); // Reject the request
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Allow cookies if needed
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
