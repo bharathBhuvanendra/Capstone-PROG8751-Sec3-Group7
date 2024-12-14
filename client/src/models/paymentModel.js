@@ -1,6 +1,6 @@
 // client/paymentModel.js
 
-const API_URL = 'http://localhost:5001/api/payments';
+const API_URL = process.env.REACT_APP_BACKEND_URL ? `${process.env.REACT_APP_BACKEND_URL}/api/payments` :  'http://localhost:5001/api/payments';
 
 // Function to create a new Payment Intent
 export const createPaymentIntent = async (paymentIntent) => {
