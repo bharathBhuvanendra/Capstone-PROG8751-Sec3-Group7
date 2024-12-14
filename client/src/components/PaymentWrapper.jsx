@@ -10,9 +10,11 @@ const PaymentWrapper = () => {
   const [clientSecret, setClientSecret] = useState(null);
   const [amount, setAmount] = useState(1000); // Default to $10 for 1 hour
 
+  const API_URL = process.env.REACT_APP_BACKEND_URL ? `${process.env.REACT_APP_BACKEND_URL}/api/payments/create-payment-intent` : 'http://localhost:5001/api/payments/create-payment-intent'
+
   const fetchPaymentIntent = async (amount) => {
     try {
-      const response = await fetch('http://localhost:5001/api/payments/create-payment-intent', {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api/payment-data';
+const API_URL = process.env.REACT_APP_BACKEND_URL ? `${process.env.REACT_APP_BACKEND_URL}/api/payment-data` :  'http://localhost:5001/api/payment-data';
 
 // Function to create a new payment
 export const createPaymentData = async (paymentData) => {
